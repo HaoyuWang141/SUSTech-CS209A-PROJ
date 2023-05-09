@@ -37,6 +37,26 @@
 			<scope>true</scope>
 		</dependency>
 
+		<!-- 链接数据库 -->
+		<!-- MyBatisPlus依赖 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+		<!-- mysql驱动依赖 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.47</version>
+		</dependency>
+		<!-- 数据连接池 durid 依赖-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.20</version>
+		</dependency>
+
 		<!-- Swagger -->
 <!--		<dependency>-->
 <!--			<groupId>io.springfox</groupId>-->
