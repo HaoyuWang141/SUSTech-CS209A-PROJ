@@ -45,8 +45,8 @@ public class HelloController {
     return "postTest4: " + user1;
   }
 
-  @RequestMapping("/test/**")
+  @RequestMapping("/hello/**")
   public String test() {
-    return "**";
+    return "hello";
   }
 }
