@@ -8,23 +8,23 @@ import org.apache.ibatis.annotations.Mapper;
 @TableName("t_order")
 public class Order {
   private Integer id;
-  private int uid;
+  private Integer uid;
   @TableField(exist = false)
   private List<User> users;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
-  public int getUid() {
+  public Integer getUid() {
     return uid;
   }
 
-  public void setUid(int uid) {
+  public void setUid(Integer uid) {
     this.uid = uid;
   }
 
