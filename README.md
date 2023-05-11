@@ -4,7 +4,33 @@
 
 
 
-## 项目结构
+## 爬虫实现
+
+
+
+## 技术栈
+
+### 后端
+
++ spring boot
++ Restful 风格
++ MybatisPlus
++ ApiFox
+
+### 前端
+
++ Vue
++ Element UI
++ Axios
++ Vue Router
+
+
+
+## 文档
+
+
+
+## Spring Boot 项目结构
 
 + config 配置类
 + controller 控制层

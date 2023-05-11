@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @TableName("t_order")
 public class Order {
-  private int id;
+  private Integer id;
   private int uid;
   @TableField(exist = false)
   private List<User> users;
