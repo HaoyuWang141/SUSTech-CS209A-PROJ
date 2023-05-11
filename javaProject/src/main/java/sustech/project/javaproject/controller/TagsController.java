@@ -11,18 +11,30 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class TagsController {
 
-  @GetMapping("/withJavaAnalysis")
-  public Map<String, Integer> withJavaAnalysis() {
+  /**
+   *
+   * @return key: tag, value: threadNum
+   */
+  @GetMapping("/threadNum-tag")
+  public Map<String, Integer> tagFrequenceDistribution() {
     return null;
   }
 
-  @GetMapping("/getUpvotesAnalysis")
-  public String upvotesAnalysis() {
+  /**
+   *
+   * @return key: combination of tags, value: average upvotes over thread
+   */
+  @GetMapping("/avgUpvotes-tags")
+  public Map<String, Integer> tagUpvotesDistribution() {
     return null;
   }
 
-  @GetMapping("/getViewsAnalysis")
-  public String viewAnalysis() {
+  /**
+   *
+   * @return key: combination of tags, value: average views over thread
+   */
+  @GetMapping("/avgViews-tags")
+  public Map<String, Integer> tagViewsDistribution() {
     return null;
   }
 }

@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/acceptedAnswer")
+@RequestMapping("/threads")
 @CrossOrigin
-public class AcceptedAnswerController {
+public class ThreadController {
 
-
-
-
-  @GetMapping("/getMoreUpvotesPercentage")
-  public float getPercentage(){
-    return 0;
+  /**
+   * @return: key: time("mm,yyyy"), value: ThreadNum (per month)
+   */
+  @GetMapping("/ThreadNum-time")
+  public Map<String, Integer> threadNumDistribution() {
+    return null;
   }
 }

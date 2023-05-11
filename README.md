@@ -73,3 +73,7 @@ java 爬虫
 
 每月thread发布数量随时间的变化
 
+
+
+数据 json   =>   (entity<=>table)   ==mybatis==>   database
+
