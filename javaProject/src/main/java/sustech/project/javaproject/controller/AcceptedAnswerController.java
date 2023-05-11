@@ -11,15 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class AcceptedAnswerController {
 
-  @GetMapping("/hasAcceptedAnswerAnalysis")
-  public String hasAcceptedAnswerAnalysis(){
-    return null;
-  }
 
-  @GetMapping("/getResolutionTime")
-  public Map<String, Integer> resolutionAnalysis(){
-    return null;
-  }
+
 
   @GetMapping("/getMoreUpvotesPercentage")
   public float getPercentage(){
