@@ -77,3 +77,8 @@ java 爬虫
 
 数据 json   =>   (entity<=>table)   ==mybatis==>   database
 
+
+
+## 数据库
+
+![ER graph](img\ER graph.png)
