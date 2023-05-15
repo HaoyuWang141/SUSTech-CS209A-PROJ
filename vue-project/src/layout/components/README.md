@@ -1,9 +1,9 @@
 # layout.components
 
-## index.js 文件
+## index.vue 文件
 
 ```js
-// index.js
+// index.vue
 export { default as Navbar } from './Navbar'
 export { default as Sidebar } from './Sidebar'
 export { default as AppMain } from './AppMain'

@@ -1,15 +1,32 @@
 <template>
-    <div>
-        <sidebar />
-        <div class="main-container">
-            <div>
-                <navbar />
-            </div>
-            <app-main />
-        </div>
+    <div class="app-wrapper">
+        <el-container>
+            <el-aside>
+                <sidebar class="sidebar-container"/>
+            </el-aside>
+            <el-container class="main-container">
+                <el-header><navbar/></el-header>
+                <el-main><app-main/></el-main>
+            </el-container>
+        </el-container>
     </div>
 </template>
 
-<script>
-
+<script setup>
+import {Navbar, Sidebar, AppMain} from './components'
 </script>
+
+
+<style scoped>
+
+.app-wrapper {
+    border: 2px solid red;
+    position: relative;
+}
+
+.sidebar-container {
+    width: 250px;
+    height: 100%;
+    background-color: #545c64;
+}
+</style>
