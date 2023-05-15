@@ -44,7 +44,7 @@ const option2 = {
                     name: '搜索引擎'
                 }
             ],
-            radius: '20%',
+            radius: '80%',
         }
     ]
 };
