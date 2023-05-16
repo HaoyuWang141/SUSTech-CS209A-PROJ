@@ -6,7 +6,7 @@
 
 <script setup>
 import BaseEchart from "@/components/Echarts/BaseEchart.vue"
-import {onMounted} from "vue";
+import {getCurrentInstance, onBeforeMount, onMounted, reactive} from "vue";
 
 
 onMounted(() => {
@@ -14,54 +14,62 @@ onMounted(() => {
 })
 
 const id1 = 'chart1'
-const data1 = [
-    {
-        name: 'A',
-        children: [
-            {
-                name: 'C',
-                value: 15,
-            },
-            {
-                name: 'D',
-                value: 10,
-            }
-        ]
+const option1 = reactive({
+    name: 'Questions',
+    tooltip: {
+        trigger: 'item'
     },
-    {
-        name: 'B',
-        children: [
-            {
-                name: 'E',
-                value: 10
-            },
-            {
-                name: 'F',
-                value: 6
-            }
-        ]
+    legend: {
+        top: '5%',
+        left: 'center'
+    },
 
-    }
-];
-const option1 = {
     series: {
         type: 'sunburst',
-        data: data1,
-        radius: [40, '60%'],
+        radius: ['30%', '75%'],
+        avoidLabelOverlap: false,
         itemStyle: {
-            borderRadius: 7,
+            borderRadius: 10,
+            borderColor: '#fff',
             borderWidth: 2
         },
+        emphasis: {
+            label: {
+                show: false,
+                fontSize: 25,
+                fontWeight: 'bold'
+            }
+        },
+        data: [
+            {
+                name: 'has Accepted Answer',
+                children: [
+                    {
+                        name: 'Non-accepted Answer has more upvotes',
+                        value: 0,
+                    },
+                    {
+                        name: 'Accepted Answer has more upvotes',
+                        value: 0,
+                    }
+                ]
+            },
+            {
+                name: 'has No Accepted Answer',
+                value: 0,
+            }
+        ],
         label: {
-            show: false
-        }
+            show: true,
+            formatter: '{c} ({d%})' // 自定义显示文本，包括名称和比例
+        },
     }
-};
+})
 
 const id2 = 'chart2'
-const data2_xAxisData = [1,2,3]
-const data2_1 = [4,5,6]
-const data2_2 = [-1,-2,-3]
+const data2_xAxisData = [1, 2, 3]
+const data2_1 = [4, 5, 6]
+const data2_2 = [-1, -2, -3]
 // const data2_xAxisData = []
 // const data2_1 = []
 // const data2_2 = []
@@ -160,4 +168,42 @@ const option2 = {
         return idx * 20
     }
 };
+
+onBeforeMount(() => {
+    const axios = getCurrentInstance().appContext.config.globalProperties.$http
+    let hasAnswerNum = 0
+    let hasAcceptedAnswerNum = 0
+    let moreUpvotesNum = 0
+    axios
+        .get("/answers/getNum", {
+            params: {
+                status: 'hasAnswer'
+            }
+        })
+        .then((response) => {
+            hasAnswerNum = response.data
+            return axios.get("/answers/getNum", {
+                params: {
+                    status: 'hasAcceptedAnswer'
+                }
+            })
+        })
+        .then((response) => {
+            hasAcceptedAnswerNum = response.data
+            option1.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
+            return axios.get("/answers/getNum", {
+                params: {
+                    status: 'moreUpvotes'
+                }
+            })
+        })
+        .then((response) => {
+            moreUpvotesNum = response.data
+            option1.series.data[0].children[0].value = moreUpvotesNum
+            option1.series.data[0].children[1].value = hasAcceptedAnswerNum - moreUpvotesNum
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+})
 </script>

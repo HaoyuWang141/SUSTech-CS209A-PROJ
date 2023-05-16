@@ -4,7 +4,7 @@
 
 <script setup>
 import * as echarts from "echarts";
-import {onMounted, onBeforeUnmount, watch, onUpdated, onBeforeUpdate} from "vue";
+import {onMounted, onBeforeUnmount, watch, onUpdated, onBeforeUpdate, watchEffect} from "vue";
 
 const props = defineProps({
     chartId: {
@@ -37,22 +37,11 @@ window.addEventListener('resize', function() {
     chart.resize();
 });
 
+
 watch(() => props.option, () => {
-    console.log("watch in BaseEchart.vue")
+    console.log("watch option in BaseEchart.vue")
     renderChart();
-});
-
-onUpdated(() => {
-    console.log("onUpdated in BaseEchart.vue")
-    console.log(props.option)
-    renderChart();
-});
-
-onBeforeUpdate(() => {
-    console.log("onBeforeUpdate in BaseEchart.vue")
-    console.log(props.option)
-    renderChart();
-});
+},{deep: true});
 
 onBeforeUnmount(() => {
     if (!chart) return;
@@ -67,6 +56,6 @@ onBeforeUnmount(() => {
     width: 100%;
     max-width: 500px;
     height: 500px;
-    overflow: hidden;
+    overflow: visible;
 }
 </style>

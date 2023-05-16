@@ -29,4 +29,12 @@ import {Navbar, Sidebar, AppMain} from './components'
     height: 100%;
     background-color: #545c64;
 }
+
+.main-container {
+    overflow: visible;
+}
+
+.el-main {
+    overflow: visible;
+}
 </style>
