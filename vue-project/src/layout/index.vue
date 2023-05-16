@@ -20,13 +20,15 @@ import {Navbar, Sidebar, AppMain} from './components'
 <style scoped>
 
 .app-wrapper {
-    //border: 2px solid red;
+    border: 2px solid red;
     position: relative;
+    min-height: 95vh;
 }
 
 .sidebar-container {
     width: 250px;
     height: 100%;
+    min-height: 95vh;
     background-color: #545c64;
 }
 

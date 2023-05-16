@@ -1,5 +1,6 @@
 <template>
     <div>tags</div>
+    <BaseEchart :option="option1" :chart-id="id1"/>
     <BaseEchart :option="option2" :chart-id="id2"/>
     <BaseEchart :option="option3" :chart-id="id3"/>
 </template>
@@ -7,6 +8,191 @@
 <script setup>
 
 import BaseEchart from "@/components/Echarts/BaseEchart.vue";
+import {reactive} from "vue";
+import "echarts-wordcloud"
+
+const id1 = 'chart1'
+const wordList = [
+    {
+        name: "珍珠奶茶",
+        value: 15000,
+    },
+    {
+        name: "冰激凌红茶",
+        value: 10081,
+    },
+    {
+        name: "椰果奶茶",
+        value: 9386,
+    },
+    {
+        name: "波霸奶茶",
+        value: 7500,
+    },
+    {
+        name: "金桔柠檬",
+        value: 7500,
+    },
+    {
+        name: "乌龙奶茶",
+        value: 6500,
+    },
+    {
+        name: "芒果欧蕾",
+        value: 6500,
+    },
+    {
+        name: "仙草奶茶",
+        value: 6000,
+    },
+    {
+        name: "翡翠柠檬",
+        value: 4500,
+    },
+    {
+        name: "芒果养乐多",
+        value: 3800,
+    },
+    {
+        name: "柠檬养乐多",
+        value: 3000,
+    },
+    {
+        name: "波霸奶绿",
+        value: 2500,
+    },
+    {
+        name: "四季春茶",
+        value: 2300,
+    },
+    {
+        name: "茉莉绿茶",
+        value: 2000,
+    },
+    {
+        name: "阿萨姆红茶",
+        value: 1900,
+    },
+    {
+        name: "奶冻摇摇乐",
+        value: 1800,
+    },
+    {
+        name: "冻顶乌龙茶",
+        value: 1700,
+    },
+    {
+        name: "咖啡",
+        value: 1600,
+    },
+    {
+        name: "焦糖玛奇朵",
+        value: 1500,
+    },
+    {
+        name: "金桔柠檬",
+        value: 1200,
+    },
+]
+const option1 = reactive({
+    series: [
+        {
+            type: "wordCloud",
+            //用来调整词之间的距离
+            gridSize: 10,
+            //用来调整字的大小范围
+            // Text size range which the value in data will be mapped to.
+            // Default to have minimum 12px and maximum 60px size.
+            sizeRange: [14, 60],
+            // Text rotation range and step in degree. Text will be rotated randomly in range [-90,                                                                             90] by rotationStep 45
+            //用来调整词的旋转方向，，[0,0]--代表着没有角度，也就是词为水平方向，需要设置角度参考注释内容
+            // rotationRange: [-45, 0, 45, 90],
+            // rotationRange: [ 0,90],
+            rotationRange: [0, 0],
+            //随机生成字体颜色
+            // maskImage: maskImage,
+            textStyle: {
+                color: function () {
+                    return (
+                        "rgb(" +
+                        Math.round(Math.random() * 255) +
+                        ", " +
+                        Math.round(Math.random() * 255) +
+                        ", " +
+                        Math.round(Math.random() * 255) +
+                        ")"
+                    );
+                },
+            },
+            //位置相关设置
+            // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
+            // Default to be put in the center and has 75% x 80% size.
+            left: "center",
+            top: "center",
+            right: null,
+            bottom: null,
+            width: "200%",
+            height: "200%",
+            //数据
+            data: wordList,
+        },
+    ],
+})
+
+// const option1 = reactive({
+//     tooltip: {
+//         show: true,
+//     },
+//     backgroundColor: '#fff', // 画布背景色
+//     series: [
+//         {
+//             name: "词云图",
+//             type: "wordCloud",
+// // maskImage: maskImage, // 图片形状
+//             keepAspect: false,
+//             sizeRange: [10, 40], //画布范围，如果设置太大会出现少词（溢出屏幕）
+//             rotationRange: [0, 0], //数据翻转范围
+//             shape: "circle",
+// // drawOutOfBound: true, // 超出画布的词汇是否隐藏
+//             drawOutOfBound: false,
+//             color: "#fff",
+//             left: "center",
+//             top: "center",
+//             right: null,
+//             bottom: null,
+// // width: "100%",
+//             height: "100%",
+//             gridSize: 8,
+//             textPadding: 10,
+//             autoSize: {
+//                 enable: true,
+//                 minSize: 6,
+//             },
+//             textStyle: {
+//                 normal: {
+//                     fontFamily: 'sans-serif',
+//                     fontWeight: 'bold',
+//                     color: "#333", // 字体颜色
+// // color: function () { // 字体颜色
+// //     return 'rgb(' + [
+// //         Math.round(Math.random() * 160),
+// //         Math.round(Math.random() * 160),
+// //         Math.round(Math.random() * 160)
+// //     ].join(',') + ')';
+// // },
+//                 },
+//                 emphasis: {
+// // focus: 'self',
+//                     textStyle: {
+//                         shadowBlur: 10,
+//                         shadowColor: "#333",
+//                     }
+//                 },
+//             },
+//             data: [{name: 'a', value: 5}, {name: 'b', value: 8}],
+//         },
+//     ],
+// })
 
 const id2 = 'chart2'
 const option2 = {
@@ -1810,7 +1996,7 @@ let option3 = {
     tooltip: {},
     legend: [
         {
-            // selectedMode: 'single',
+// selectedMode: 'single',
             data: graph.categories.map(function (a) {
                 return a.name;
             })

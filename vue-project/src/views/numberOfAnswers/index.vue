@@ -78,6 +78,9 @@ const tableData = reactive([
 
 const id3 = 'chart3'
 const option3 = reactive({
+    tooltip: {
+        show: true,
+    },
     xAxis: {
         type: 'category',
         data: [],

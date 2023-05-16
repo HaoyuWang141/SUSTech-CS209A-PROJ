@@ -63,6 +63,9 @@ const option1 = reactive({
 const id2 = 'chart2'
 const option2 = reactive({
     backgroundColor: '#fff',
+    tooltip: {
+        show: true,
+    },
     grid: {
         left: '5%',
         right: '5%'
@@ -96,9 +99,9 @@ const option2 = reactive({
     },
     visualMap: {
         show: false,
-        min: 0,
-        max: 50,
-        dimension: 0,
+        min: 5,
+        max: 30,
+        dimension: 1,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -107,7 +110,6 @@ const option2 = reactive({
         name: 'number',
         type: 'bar',
         data: [],
-        z: 3,
         itemStyle: {
             borderRadius: 5
         }
@@ -149,6 +151,15 @@ onBeforeMount(() => {
         })
         .catch((error) => {
             console.log(error)
+        })
+
+    axios
+        .get("/answers/ThreadNum-ResolutionTime")
+        .then((response) => {
+            for (let key in response.data) {
+                option2.xAxis[0].data.push(key)
+                option2.series[0].data.push(response.data[key])
+            }
         })
 })
 </script>
