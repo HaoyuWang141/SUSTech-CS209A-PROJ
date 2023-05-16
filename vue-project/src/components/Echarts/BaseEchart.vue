@@ -38,21 +38,9 @@ window.addEventListener('resize', function() {
 });
 
 watch(() => props.option, () => {
-    console.log("watch in BaseEchart.vue")
+    console.log("watch option in BaseEchart.vue")
     renderChart();
-});
-
-onUpdated(() => {
-    console.log("onUpdated in BaseEchart.vue")
-    console.log(props.option)
-    renderChart();
-});
-
-onBeforeUpdate(() => {
-    console.log("onBeforeUpdate in BaseEchart.vue")
-    console.log(props.option)
-    renderChart();
-});
+},{deep: true});
 
 onBeforeUnmount(() => {
     if (!chart) return;
@@ -67,6 +55,6 @@ onBeforeUnmount(() => {
     width: 100%;
     max-width: 500px;
     height: 500px;
-    overflow: hidden;
+    overflow: visible;
 }
 </style>

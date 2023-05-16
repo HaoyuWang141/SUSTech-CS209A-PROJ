@@ -51,7 +51,7 @@
 
 1. 没有答案的问题占比: 饼状图
 2. answer 数量的 avg 和 max: 表格
-3. answer 数量分布: 直方图
+3. answer 数量分布: 直方图, 横坐标为answer数量范围, 纵坐标为question数量
 4. 问题数, 回答数分布随时间的变化: 点线图
 
 ### Accepted Answers
@@ -60,7 +60,7 @@
 2. 问题解决时间的分布: 直方图, 横坐标为时长范围, 纵坐标为问题数量
 3. 展示 non-accepted answer 的 upvote 更高的问题数量及百分比: 同一旭日图
 
-### Tags
+### Tags	
 
 1. 经常和java一起出现的tag: 词云图
 2. 展示tag得到最多的upvotes: 极坐标系下的柱状图

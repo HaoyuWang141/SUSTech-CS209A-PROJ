@@ -16,6 +16,7 @@
     border: 2px solid red;
     padding: 2px;
     position: relative;
+    overflow: visible;
 }
 .fade-enter-active,
 .fade-leave-active {
