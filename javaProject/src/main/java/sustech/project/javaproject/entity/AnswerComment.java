@@ -4,25 +4,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import java.sql.Timestamp;
-
-@TableName("questions")
-public class Question {
+@TableName("answers_comments")
+public class AnswerComment {
 
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer userID;
-    private Timestamp postTime;
-    private Integer votes;
-    private Integer views;
-    private Boolean isAnswered;
-    private Integer acceptedAnswerID;
+    private Integer answerID;
+    private Integer commentID;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Question question = (Question) o;
-        return this.id.equals(question.id);
+        AnswerComment answerComment = (AnswerComment) o;
+        return this.answerID.equals(answerComment.answerID) && this.commentID.equals(answerComment.commentID);
     }
 }

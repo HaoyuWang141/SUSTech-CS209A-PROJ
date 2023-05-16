@@ -5,65 +5,23 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.List;
+import java.util.Objects;
 
-@TableName("t_user")
+@TableName("users")
 public class User {
-  @TableId(type = IdType.AUTO)
-  private Integer id;
-  private String username;
-  private String password;
-  private String birthday;
-  @TableField(exist = false)
-  private List<Order> orders;
 
-  public Integer getId() {
-    return id;
-  }
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    @TableField(exist = false)
+    private List<Order> orders;
 
-  public String getUsername() {
-    return username;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return this.id.equals(user.id);
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getBirthday() {
-    return birthday;
-  }
-
-  public void setBirthday(String birthday) {
-    this.birthday = birthday;
-  }
-
-  public List<Order> getOrders() {
-    return orders;
-  }
-
-  public void setOrders(List<Order> orders) {
-    this.orders = orders;
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", username='" + username + '\'' +
-        ", password='" + password + '\'' +
-        ", birthday='" + birthday + '\'' +
-        ", orders=" + orders +
-        '}';
-  }
 }
