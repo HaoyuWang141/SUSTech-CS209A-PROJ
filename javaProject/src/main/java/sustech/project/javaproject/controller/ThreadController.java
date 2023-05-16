@@ -14,7 +14,7 @@ public class ThreadController {
   /**
    * @return: key: time("mm,yyyy"), value: ThreadNum (per month)
    */
-  @GetMapping("/ThreadNum-time")
+  @GetMapping("/ThreadNum-Time")
   public Map<String, Integer> threadNumDistribution() {
     return null;
   }

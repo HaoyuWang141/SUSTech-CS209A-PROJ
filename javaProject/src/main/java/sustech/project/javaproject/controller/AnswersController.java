@@ -1,6 +1,7 @@
 package sustech.project.javaproject.controller;
 
 import java.net.Inet4Address;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,12 +26,16 @@ public class AnswersController {
         result = 70;
         break;
       case "hasAcceptedAnswer":
+        result = 60;
         break;
       case "avgAnswerNum":
+        result = 10;
         break;
       case "maxAnswerNum":
+        result = 11;
         break;
-      case "MoreUpvotes":
+      case "moreUpvotes":
+        result = 12;
         break;
     }
     System.out.println(result);
@@ -38,11 +43,27 @@ public class AnswersController {
   }
 
   /**
-   * @return: key: AnswerNum, value: ThreadNum
+   * @return: key: AnswerNumRange, value: ThreadNum
    */
   @GetMapping("/ThreadNum-AnswerNum")
-  public Map<Integer, Integer> ansNumDistribution() {
-    return null;
+  public Map<String, Integer> ansNumDistribution() {
+    Map<String,Integer> map = new HashMap<>();
+    map.put("0",10);
+    map.put("1-5",20);
+    map.put("6-10",30);
+    map.put(">10",10);
+    return map;
+  }
+
+  @GetMapping("/AnswerNum-Time")
+  public Map<String, Integer> ansNumDistributionByTime() {
+    Map<String,Integer> map = new HashMap<>();
+    map.put("<1900",10);
+    map.put("1900-2000",20);
+    map.put("2000-2010",30);
+    map.put("2010-2020",10);
+    map.put(">2020",10);
+    return map;
   }
 
   /**
