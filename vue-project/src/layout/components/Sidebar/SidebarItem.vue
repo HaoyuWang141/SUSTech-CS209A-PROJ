@@ -1,6 +1,6 @@
 <template>
     <router-link :to="resolvePath(item)" class="container">
-        <el-menu-item v-if="show(route)">
+        <el-menu-item v-if="show(route)" :index="item.path">
             <inline-svg :src="`src/icons/svg/${item.icon}.svg`" width="20" height="20" class="icon"/>
 <!--            <img :src="`src/icons/svg/${item.icon}.svg`" class="icon" alt="svg image"/>-->
             <span slot="title">{{ item.title }}</span>
@@ -12,7 +12,6 @@
 import {defineProps, reactive} from "vue";
 import InlineSvg from 'vue-inline-svg';
 
-const customFill = '#ffd04b'
 const item = reactive({
     path: '',
     icon: '',
@@ -53,6 +52,6 @@ function resolvePath(item) {
     width: 20px;
     height: 20px;
     margin-right: 10px;
-    fill: white;
+    fill: currentColor;
 }
 </style>

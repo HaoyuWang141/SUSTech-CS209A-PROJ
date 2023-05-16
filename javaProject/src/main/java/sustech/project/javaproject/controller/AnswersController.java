@@ -19,8 +19,10 @@ public class AnswersController {
     int result = -1;
     switch (status) {
       case "all":
+        result = 100;
         break;
       case "hasAnswer":
+        result = 70;
         break;
       case "hasAcceptedAnswer":
         break;
@@ -31,6 +33,7 @@ public class AnswersController {
       case "MoreUpvotes":
         break;
     }
+    System.out.println(result);
     return result;
   }
 

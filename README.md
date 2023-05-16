@@ -4,14 +4,6 @@
 
 
 
-## 爬虫实现
-
-java 爬虫
-
-
-
-
-
 ## 技术栈
 
 ### 后端
@@ -30,7 +22,9 @@ java 爬虫
 
 
 
-## 文档
+## 数据库设计
+
+![ER graph](img\ER graph.png)
 
 
 
@@ -47,38 +41,36 @@ java 爬虫
 
 
 
-## 常用统计图
-
-柱状图
-
-条形图
-
-饼状图
-
-折线图
-
-热力图
-
-散点图
-
-热力图
-
-词云
-
-雷达图
+## Vue 项目结构
 
 
 
-## 条目
+## Basic Requirements
 
-每月thread发布数量随时间的变化
+### Number of Answers
 
+1. 没有答案的问题占比: 饼状图
+2. answer 数量的 avg 和 max: 表格
+3. answer 数量分布: 直方图
+4. 问题数, 回答数分布随时间的变化: 点线图
 
+### Accepted Answers
 
-数据 json   =>   (entity<=>table)   ==mybatis==>   database
+1. 展示有 accepted answer 问题的百分比: 旭日图
+2. 问题解决时间的分布: 直方图, 横坐标为时长范围, 纵坐标为问题数量
+3. 展示 non-accepted answer 的 upvote 更高的问题数量及百分比: 同一旭日图
 
+### Tags
 
+1. 经常和java一起出现的tag: 词云图
+2. 展示tag得到最多的upvotes: 极坐标系下的柱状图
+3. 展示tags得到最多的upvotes: 关系图
+4. 展示tag得到最多的views: 极坐标系下的柱状图
+5. 展示tags得到最多的views: 关系图
 
-## 数据库
+### Users
 
-![ER graph](img\ER graph.png)
+1. 用户数量分布+回答者+评论者: 直方图 + 表格(avg+max+min)
+2. 用户数量变化: 数量随时间变化
+3. 活跃用户(取前十): 环形柱状图
+

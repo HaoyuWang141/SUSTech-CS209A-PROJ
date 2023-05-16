@@ -1,65 +1,123 @@
 <template>
     <div>number of answers</div>
     <BaseEchart :chart-id="id1" :option="option1"/>
-    <BaseEchart :chart-id="id2" :option="option2"/>
     <BaseEchart :chart-id="id3" :option="option3"/>
 </template>
 
 <script setup>
-import BaseEchart from "@/Echarts/BaseEchart.vue"
+import BaseEchart from "@/components/Echarts/BaseEchart.vue"
+import {onBeforeMount, onMounted, reactive, getCurrentInstance} from "vue";
 
 const id1 = 'chart1'
-const option1 = {
-    xAxis: {
-        type: "category",
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+const option1 = reactive({
+    tooltip: {
+        trigger: 'item'
     },
-    yAxis: {
-        type: "value",
+    legend: {
+        top: '5%',
+        left: 'center'
     },
     series: [
         {
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: "line",
-        },
-    ],
-}
-
-const id2 = 'chart2'
-const option2 = {
-    series: [
-        {
+            name: 'Questions',
             type: 'pie',
-            data: [
-                {
-                    value: 335,
-                    name: '直接访问'
-                },
-                {
-                    value: 234,
-                    name: '联盟广告'
-                },
-                {
-                    value: 1548,
-                    name: '搜索引擎'
+            radius: ['45%', '80%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2
+            },
+            label: {
+                show: false,
+                position: 'center'
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 25,
+                    fontWeight: 'bold'
                 }
-            ],
-            radius: '80%',
+            },
+            labelLine: {
+                show: false
+            },
+            data: [
+                {value: null, name: 'with answers'},
+                {value: null, name: 'without answers'}
+            ]
         }
     ]
-};
+})
 
 const id3 = 'chart3'
 const option3 = {
-    xAxis: {
-        data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    backgroundColor: '#08263a',
+    grid: {
+        left: '10%',
+        right: '5%',
+        top: '20%',
+        bottom: '20%',
+        // containLabel: true
     },
-    yAxis: {},
+    xAxis: {
+        type: 'value',
+        data: [10, 20, 30]
+    },
+    yAxis: {
+
+        type: 'value'
+    },
     series: [
         {
-            type: 'scatter',
-            data: [220, 182, 191, 234, 290, 330, 310]
+            data: [
+                [0, 10],
+                [10, 20],
+                [20, 120],
+                [40, 200],
+                [50, 50]
+            ],
+            type: 'line'
         }
-    ]
+    ],
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 50,
+        dimension: 0,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
 };
+
+onBeforeMount(() => {
+    console.log('before mount')
+    getCurrentInstance().appContext.config.globalProperties.$http
+        .get("/answers/getNum", {
+            params: {
+                status: 'hasAnswer'
+            }
+        }).then((response) => {
+
+        option1.series[0].data[0].value = response.data
+        console.log(option1.series[0].data[0].value)
+    })
+
+    getCurrentInstance().appContext.config.globalProperties.$http
+        .get("/answers/getNum", {
+            params: {
+                status: 'all'
+            }
+        }).then((response) => {
+        option1.series[0].data[1].value = response.data - option1.series[0].data[0].value
+        console.log(option1.series[0].data[1].value)
+    })
+})
+
+onMounted(() => {
+    console.log('mounted')
+})
+
+
 </script>

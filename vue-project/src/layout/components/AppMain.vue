@@ -13,10 +13,17 @@
 
 <style scoped>
 .app-main {
-    height: 95%;
     border: 2px solid red;
     padding: 2px;
     position: relative;
-    overflow: hidden;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

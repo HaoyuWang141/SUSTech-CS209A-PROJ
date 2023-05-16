@@ -1,12 +1,10 @@
 <template>
-      <div class="home-container">
-          <div class="home-text">Introduction to Project</div>
-      </div>
+    <div class="home-container">
+        <div class="home-text">Introduction to Project</div>
+    </div>
 </template>
 
 <script setup>
-
-const icon = 'house'
 </script>
 
 <style>
