@@ -20,7 +20,7 @@ import {Navbar, Sidebar, AppMain} from './components'
 <style scoped>
 
 .app-wrapper {
-    border: 2px solid red;
+    //border: 2px solid red;
     position: relative;
 }
 

@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .chart-container {
-    border: 2px solid red;
+    //border: 2px solid red;
     width: 100%;
     max-width: 500px;
     height: 500px;

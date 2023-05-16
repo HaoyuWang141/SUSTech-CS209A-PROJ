@@ -1,5 +1,4 @@
 <template>
-    <div>number of answers</div>
     <BaseEchart :chart-id="id1" :option="option1"/>
     <el-table
             :data="tableData"
@@ -28,7 +27,6 @@ const id1 = ref('chart1')
 const option1 = reactive({
     tooltip: {
         trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
     },
     legend: {
         top: '5%',
@@ -41,9 +39,9 @@ const option1 = reactive({
             radius: ['45%', '75%'],
             avoidLabelOverlap: false,
             itemStyle: {
-                borderRadius: 10,
+                borderRadius: 20,
                 borderColor: '#fff',
-                borderWidth: 2
+                borderWidth: 3
             },
             label: {
                 show: false,
@@ -82,15 +80,42 @@ const id3 = 'chart3'
 const option3 = reactive({
     xAxis: {
         type: 'category',
-        data: []
+        data: [],
+        axisLine: {
+            show: true,
+        },
+        axisTick: {
+            show: false
+        },
     },
     yAxis: {
-        type: 'value'
+        type: 'value',
+        axisLine: {
+            show: true,
+        },
+        splitLine: {
+            show: false
+        }
+    },
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 30,
+        dimension: 1,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
     },
     series: [
         {
             data: [],
-            type: 'bar'
+            type: 'bar',
+            itemStyle: {
+                // opacity: 0.4,
+                borderRadius: 30,
+                // shadowBlur: 3,
+                // shadowColor: 'red'
+            },
         }
     ]
 })
@@ -197,6 +222,6 @@ onMounted(() => {
 <style scoped>
 .table {
     padding: 50px 50px 50px 50px;
-    border: 1px solid red;
+//border: 1px solid red;
 }
 </style>

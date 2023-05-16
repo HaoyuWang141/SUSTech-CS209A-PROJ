@@ -13,7 +13,7 @@
 
 <style scoped>
 .app-main {
-    border: 2px solid red;
+    //border: 2px solid red;
     padding: 2px;
     position: relative;
     overflow: visible;
