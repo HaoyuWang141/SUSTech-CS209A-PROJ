@@ -1,99 +1,18 @@
 <template>
-    <div>tags</div>
     <BaseEchart :option="option1" :chart-id="id1"/>
     <BaseEchart :option="option2" :chart-id="id2"/>
     <BaseEchart :option="option3" :chart-id="id3"/>
+    <BaseEchart :option="option4" :chart-id="id4"/>
+    <BaseEchart :option="option5" :chart-id="id5"/>
 </template>
 
 <script setup>
 
 import BaseEchart from "@/components/Echarts/BaseEchart.vue";
-import {reactive} from "vue";
+import {getCurrentInstance, onBeforeMount, reactive} from "vue";
 import "echarts-wordcloud"
 
 const id1 = 'chart1'
-const wordList = [
-    {
-        name: "珍珠奶茶",
-        value: 15000,
-    },
-    {
-        name: "冰激凌红茶",
-        value: 10081,
-    },
-    {
-        name: "椰果奶茶",
-        value: 9386,
-    },
-    {
-        name: "波霸奶茶",
-        value: 7500,
-    },
-    {
-        name: "金桔柠檬",
-        value: 7500,
-    },
-    {
-        name: "乌龙奶茶",
-        value: 6500,
-    },
-    {
-        name: "芒果欧蕾",
-        value: 6500,
-    },
-    {
-        name: "仙草奶茶",
-        value: 6000,
-    },
-    {
-        name: "翡翠柠檬",
-        value: 4500,
-    },
-    {
-        name: "芒果养乐多",
-        value: 3800,
-    },
-    {
-        name: "柠檬养乐多",
-        value: 3000,
-    },
-    {
-        name: "波霸奶绿",
-        value: 2500,
-    },
-    {
-        name: "四季春茶",
-        value: 2300,
-    },
-    {
-        name: "茉莉绿茶",
-        value: 2000,
-    },
-    {
-        name: "阿萨姆红茶",
-        value: 1900,
-    },
-    {
-        name: "奶冻摇摇乐",
-        value: 1800,
-    },
-    {
-        name: "冻顶乌龙茶",
-        value: 1700,
-    },
-    {
-        name: "咖啡",
-        value: 1600,
-    },
-    {
-        name: "焦糖玛奇朵",
-        value: 1500,
-    },
-    {
-        name: "金桔柠檬",
-        value: 1200,
-    },
-]
 const option1 = reactive({
     series: [
         {
@@ -134,111 +53,49 @@ const option1 = reactive({
             width: "200%",
             height: "200%",
             //数据
-            data: wordList,
+            data: [],
         },
     ],
 })
 
-// const option1 = reactive({
-//     tooltip: {
-//         show: true,
-//     },
-//     backgroundColor: '#fff', // 画布背景色
-//     series: [
-//         {
-//             name: "词云图",
-//             type: "wordCloud",
-// // maskImage: maskImage, // 图片形状
-//             keepAspect: false,
-//             sizeRange: [10, 40], //画布范围，如果设置太大会出现少词（溢出屏幕）
-//             rotationRange: [0, 0], //数据翻转范围
-//             shape: "circle",
-// // drawOutOfBound: true, // 超出画布的词汇是否隐藏
-//             drawOutOfBound: false,
-//             color: "#fff",
-//             left: "center",
-//             top: "center",
-//             right: null,
-//             bottom: null,
-// // width: "100%",
-//             height: "100%",
-//             gridSize: 8,
-//             textPadding: 10,
-//             autoSize: {
-//                 enable: true,
-//                 minSize: 6,
-//             },
-//             textStyle: {
-//                 normal: {
-//                     fontFamily: 'sans-serif',
-//                     fontWeight: 'bold',
-//                     color: "#333", // 字体颜色
-// // color: function () { // 字体颜色
-// //     return 'rgb(' + [
-// //         Math.round(Math.random() * 160),
-// //         Math.round(Math.random() * 160),
-// //         Math.round(Math.random() * 160)
-// //     ].join(',') + ')';
-// // },
-//                 },
-//                 emphasis: {
-// // focus: 'self',
-//                     textStyle: {
-//                         shadowBlur: 10,
-//                         shadowColor: "#333",
-//                     }
-//                 },
-//             },
-//             data: [{name: 'a', value: 5}, {name: 'b', value: 8}],
-//         },
-//     ],
-// })
-
 const id2 = 'chart2'
-const option2 = {
+const option2 = reactive({
+    title: {
+        text: 'Tags - Upvotes (avg)',
+        left: 'center'
+    },
     angleAxis: {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: []
+    },
+    tooltip: {
+        trigger: 'item'
     },
     radiusAxis: {},
     polar: {},
+    itemStyle: {
+        borderRadius: 20,
+        borderColor: '#fff',
+        borderWidth: 3
+    },
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 30,
+        dimension: 1,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
     series: [
         {
+            radius: ['50%'],
             type: 'bar',
-            data: [1, 2, 3, 4, 3, 5, 1],
+            data: [],
             coordinateSystem: 'polar',
-            name: 'A',
-            stack: 'a',
-            emphasis: {
-                focus: 'series'
-            }
-        },
-        {
-            type: 'bar',
-            data: [2, 4, 6, 1, 3, 2, 1],
-            coordinateSystem: 'polar',
-            name: 'B',
-            stack: 'a',
-            emphasis: {
-                focus: 'series'
-            }
-        },
-        {
-            type: 'bar',
-            data: [1, 2, 3, 4, 1, 2, 5],
-            coordinateSystem: 'polar',
-            name: 'C',
-            stack: 'a',
-            emphasis: {
-                focus: 'series'
-            }
         }
-    ],
-    legend: {
-        show: true,
-        data: ['A', 'B', 'C']
-    }
-};
+    ]
+})
 
 const ROOT_PATH = 'https://echarts.apache.org/examples/data/asset/data/les-miserables.json';
 let graph = {
@@ -2031,4 +1888,130 @@ let option3 = {
     ]
 };
 
+const id4 = 'chart4'
+const option4 = reactive({
+    title: {
+        text: 'Tags - Views (avg)',
+        left: 'center'
+    },
+    angleAxis: {
+        type: 'category',
+        data: []
+    },
+    tooltip: {},
+    radiusAxis: {},
+    polar: {},
+    itemStyle: {
+        borderRadius: 20,
+        borderColor: '#fff',
+        borderWidth: 3
+    },
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 30,
+        dimension: 1,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
+    series: [
+        {
+            type: 'bar',
+            data: [],
+            coordinateSystem: 'polar',
+            stack: 'a',
+            emphasis: {
+                focus: 'series'
+            }
+        }
+    ]
+})
+
+let id5 = 'chart5';
+let option5 = {
+    title: {
+        text: 'Les Miserables',
+        subtext: 'Default layout',
+        top: 'bottom',
+        left: 'right'
+    },
+    tooltip: {},
+    legend: [
+        {
+// selectedMode: 'single',
+            data: graph.categories.map(function (a) {
+                return a.name;
+            })
+        }
+    ],
+    animationDuration: 1500,
+    animationEasingUpdate: 'quinticInOut',
+    series: [
+        {
+            name: 'Les Miserables',
+            type: 'graph',
+            layout: 'none',
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
+            label: {
+                position: 'right',
+                formatter: '{b}'
+            },
+            lineStyle: {
+                color: 'source',
+                curveness: 0.3
+            },
+            emphasis: {
+                focus: 'adjacency',
+                lineStyle: {
+                    width: 10
+                }
+            }
+        }
+    ]
+};
+
+onBeforeMount(() => {
+    const axios = getCurrentInstance().appContext.config.globalProperties.$http
+    axios.get("/tags/threadNum-tag")
+        .then((response) => {
+            for (let key in response.data) {
+                option1.series[0].data.push({
+                    name: key,
+                    value: response.data[key]
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+    axios.get("/tags/avgUpvotes-tag")
+        .then((response) => {
+            console.log(response.data)
+            for (let key in response.data) {
+                option2.angleAxis.data.push(key)
+                option2.series[0].data.push(response.data[key])
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+    axios.get("/tags/avgViews-tag")
+        .then((response) => {
+            console.log(response.data)
+            for (let key in response.data) {
+                option4.angleAxis.data.push(key)
+                option4.series[0].data.push(response.data[key])
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+})
 </script>

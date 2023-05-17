@@ -1,14 +1,20 @@
 <template>
     <BaseEchart :chart-id="id1" :option="option1"/>
-    <BaseEchart :chart-id="id2" :option="option2"/>
+    <BaseEchart :chart-id="id2" :option="option2" class="row"/>
+    <BaseEchart :chart-id="id3" :option="option3" class="row"/>
+    <BaseEchart :chart-id="id4" :option="option4"/>
 </template>
 
 <script setup>
 import BaseEchart from "@/components/Echarts/BaseEchart.vue"
-import {getCurrentInstance, onBeforeMount, onMounted, reactive} from "vue";
+import {getCurrentInstance, onBeforeMount, reactive} from "vue";
 
 const id1 = 'chart1'
 const option1 = reactive({
+    title: {
+        text: 'Analysis of Accepted Answers',
+        left: 'center'
+    },
     name: 'Questions',
     tooltip: {
         trigger: 'item'
@@ -62,6 +68,109 @@ const option1 = reactive({
 
 const id2 = 'chart2'
 const option2 = reactive({
+    title: {
+        text: 'Proportion of Accepted Answers',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'horizontal',
+        left: 'center',
+        top: '10%'
+    },
+    grid: {
+        left: 'center',
+        top: 'center',
+        width: '100%',
+        height: '100%'
+    },
+    series: {
+        name: 'Access From',
+        type: 'pie',
+        radius: '50%',
+        data: [
+            {value: 0, name: 'Accepted'},
+            {value: 0, name: 'Non-accepted'}
+        ],
+        label: {
+            show: false,
+        },
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: function (colors) {
+                    const colorList = ['#fc8251', '#5470c6'];
+                    return colorList[colors.dataIndex];
+                }
+            },
+        }
+    }
+})
+
+const id3 = 'chart3'
+const option3 = reactive({
+    title: {
+        text: 'Proportion of Special Accepted Answers',
+        subtext: 'another answer has more upvotes than the accepted answer',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        top: '12%'
+    },
+    grid: {
+        left: 'center',
+        top: 'center',
+        width: '100%',
+        height: '100%'
+    },
+    series: {
+        name: 'Access From',
+        type: 'pie',
+        radius: '50%',
+        data: [
+            {value: 0, name: 'Accepted Answer More Upvotes'},
+            {value: 0, name: 'Non-accepted Answer More Upvotes'}
+        ],
+        label: {
+            show: false,
+        },
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: function (colors) {
+                    const colorList = ['#91cd77', '#ef6567'];
+                    return colorList[colors.dataIndex];
+                }
+            },
+        }
+    }
+})
+
+const id4 = 'chart4'
+const option4 = reactive({
+    title: {
+        text: 'Distribution of Resolution Time',
+        left: 'center'
+    },
     backgroundColor: '#fff',
     tooltip: {
         show: true,
@@ -138,6 +247,8 @@ onBeforeMount(() => {
         .then((response) => {
             hasAcceptedAnswerNum = response.data
             option1.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
+            option2.series.data[0].value = hasAcceptedAnswerNum
+            option2.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
             return axios.get("/answers/getNum", {
                 params: {
                     status: 'moreUpvotes'
@@ -148,6 +259,8 @@ onBeforeMount(() => {
             moreUpvotesNum = response.data
             option1.series.data[0].children[0].value = moreUpvotesNum
             option1.series.data[0].children[1].value = hasAcceptedAnswerNum - moreUpvotesNum
+            option3.series.data[0].value = moreUpvotesNum
+            option3.series.data[1].value = hasAcceptedAnswerNum - moreUpvotesNum
         })
         .catch((error) => {
             console.log(error)
@@ -157,9 +270,15 @@ onBeforeMount(() => {
         .get("/answers/ThreadNum-ResolutionTime")
         .then((response) => {
             for (let key in response.data) {
-                option2.xAxis[0].data.push(key)
-                option2.series[0].data.push(response.data[key])
+                option4.xAxis[0].data.push(key)
+                option4.series[0].data.push(response.data[key])
             }
         })
 })
 </script>
+
+<style>
+.row {
+//display: flex;
+}
+</style>

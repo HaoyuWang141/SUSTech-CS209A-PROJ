@@ -17,6 +17,8 @@
     padding: 2px;
     position: relative;
     overflow: visible;
+    min-width: 700px;
+    max-height: 79vh;
 }
 .fade-enter-active,
 .fade-leave-active {

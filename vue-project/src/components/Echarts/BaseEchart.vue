@@ -28,8 +28,6 @@ function renderChart() {
 }
 
 onMounted(() => {
-    console.log("onMounted in BaseEchart.vue")
-    console.log(props.option)
     initChart();
 });
 
@@ -37,9 +35,7 @@ window.addEventListener('resize', function() {
     chart.resize();
 });
 
-
 watch(() => props.option, () => {
-    console.log("watch option in BaseEchart.vue")
     renderChart();
 },{deep: true});
 
@@ -53,9 +49,10 @@ onBeforeUnmount(() => {
 <style scoped>
 .chart-container {
     //border: 2px solid red;
+    padding: 10px 0 20px 150px;
     width: 100%;
-    max-width: 500px;
-    height: 500px;
+    max-width: 400px;
+    height: 400px;
     overflow: visible;
 }
 </style>

@@ -2,8 +2,9 @@
     <BaseEchart :chart-id="id1" :option="option1"/>
     <el-table
             :data="tableData"
-            style="width: 100%"
-            class="table">
+            style="width: 100% ;padding: 10px 0 20px 130px;"
+            class="table"
+            :header-cell-style="{'text-align':'center'}">
         <el-table-column
                 prop="item"
                 label="条目"
@@ -12,9 +13,11 @@
         <el-table-column
                 prop="number"
                 label="数量"
-                width="180">
+                width="180"
+                align="center">
         </el-table-column>
     </el-table>
+    <br /><br />
     <BaseEchart :chart-id="id3" :option="option3"/>
     <BaseEchart :chart-id="id4" :option="option4"/>
 </template>
@@ -25,6 +28,10 @@ import {onBeforeMount, onMounted, reactive, getCurrentInstance, ref} from "vue";
 
 const id1 = ref('chart1')
 const option1 = reactive({
+    title: {
+        text: 'Number of Questions with Answer',
+        left: 'center'
+    },
     tooltip: {
         trigger: 'item',
     },
@@ -78,8 +85,19 @@ const tableData = reactive([
 
 const id3 = 'chart3'
 const option3 = reactive({
+    title : {
+        text: 'Distribution of Answer Number',
+        left: 'center'
+    },
     tooltip: {
         show: true,
+    },
+    grid: {
+        left: '10%',
+        right: '5%',
+        top: '20%',
+        bottom: '20%',
+        // containLabel: true
     },
     xAxis: {
         type: 'category',
@@ -125,6 +143,10 @@ const option3 = reactive({
 
 const id4 = 'chart4'
 const option4 = reactive({
+    title: {
+        text: 'Answer Number Over Time',
+        left: 'center'
+    },
     grid: {
         left: '10%',
         right: '5%',
@@ -137,8 +159,13 @@ const option4 = reactive({
         data: []
     },
     yAxis: {
-
-        type: 'value'
+        type: 'value',
+        axisLine: {
+            show: true,
+        },
+        splitLine: {
+            show: false
+        }
     },
     series: [
         {
@@ -163,44 +190,48 @@ onBeforeMount(() => {
         params: {
             status: 'hasAnswer'
         }
-    }).then((response) => {
+    })
+        .then((response) => {
         option1.series[0].data[0].value = response.data
-        console.log(option1.series[0].data[0].value)
         return axios.get("/answers/getNum",
             {
                 params: {
                     status: 'all'
                 }
             })
-    }).then((response) => {
+    })
+        .then((response) => {
         option1.series[0].data[1].value = response.data - option1.series[0].data[0].value
-        console.log(option1.series[0].data[1].value)
-    }).catch((error) => {
+    })
+        .catch((error) => {
         console.log(error)
     })
 
-    axios.get("/answers/getNum", {params: {status: 'avgAnswerNum'}})
+    axios
+        .get("/answers/getNum", {params: {status: 'avgAnswerNum'}})
         .then((response) => {
             tableData[0].number = response.data
-        }).catch((error) => {
+        })
+        .catch((error) => {
         console.log(error)
     })
 
     axios.get("/answers/getNum", {params: {status: 'maxAnswerNum'}})
         .then((response) => {
             tableData[1].number = response.data
-        }).catch((error) => {
+        })
+        .catch((error) => {
         console.log(error)
     })
 
     axios.get("/answers/ThreadNum-AnswerNum")
         .then((response) => {
-            console.log(response.data)
             for (let key in response.data) {
                 option3.xAxis.data.push(key)
                 option3.series[0].data.push(response.data[key])
             }
-        }).catch((error) => {
+        })
+        .catch((error) => {
         console.log(error)
     })
 
@@ -211,13 +242,10 @@ onBeforeMount(() => {
                 option4.xAxis.data.push(key)
                 option4.series[0].data.push(response.data[key])
             }
-        }).catch((error) => {
+        })
+        .catch((error) => {
         console.log(error)
     })
-})
-
-onMounted(() => {
-    console.log('mounted')
 })
 
 </script>

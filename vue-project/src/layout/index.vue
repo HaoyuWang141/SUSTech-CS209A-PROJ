@@ -20,7 +20,7 @@ import {Navbar, Sidebar, AppMain} from './components'
 <style scoped>
 
 .app-wrapper {
-    border: 2px solid red;
+    //border: 2px solid red;
     position: relative;
     min-height: 95vh;
 }
@@ -33,10 +33,12 @@ import {Navbar, Sidebar, AppMain} from './components'
 }
 
 .main-container {
-    overflow: visible;
+    //border: 2px solid red;
+    overflow: auto;
 }
 
 .el-main {
+    //border: 2px solid red;
     overflow: visible;
 }
 </style>

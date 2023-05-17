@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        navbar
+        CS209A Project
         <!--      <hamburger />-->
         <!--      <breadcrumb />-->
     </div>

@@ -1,10 +1,12 @@
 package sustech.project.javaproject.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @TableName("questions")
 public class Question {
@@ -17,6 +19,12 @@ public class Question {
     private Integer views;
     private Boolean isAnswered;
     private Integer acceptedAnswerID;
+
+    @TableField(exist = false)
+    private List<Answer> answers;
+
+    @TableField(exist = false)
+    private List<Tag> tags;
 
     @Override
     public boolean equals(Object o) {
