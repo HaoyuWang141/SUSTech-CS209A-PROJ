@@ -39,6 +39,9 @@ public class TagsController {
         map.put(tag.getTagName(), 1);
       }
     }
+    // FIXME
+    map.put("java", 5); //
+    map.put("cpp", 30); //
     return map;
   }
 

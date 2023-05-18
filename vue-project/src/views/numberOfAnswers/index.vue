@@ -264,6 +264,5 @@ onBeforeMount(() => {
 <style scoped>
 .table {
     padding: 50px 50px 50px 50px;
-//border: 1px solid red;
 }
 </style>

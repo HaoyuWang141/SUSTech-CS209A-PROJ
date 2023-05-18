@@ -1,56 +1,56 @@
-drop database java2_project;
-create database java2_project;
+--drop database java2_project;
+--create database java2_project;
 
 drop table tags, users, answers, comments, questions, questions_answers, questions_tags, answers_comments;
 
 create table tags(
-    tagName varchar primary key
+    tag_name varchar primary key
 );
 
 create table users(
-    userID integer primary key
+    id integer primary key
 );
 
 create table answers(
     id integer primary key,
-    userID integer references users,
-    postTime timestamp,
+    user_i_d integer references users,
+    post_time timestamp,
     upvotes integer
 );
 
 create table comments(
     id integer primary key,
-    userID integer references users,
-    postTime timestamp
+    user_i_d integer references users,
+    post_time timestamp
 );
 
 create table questions(
     id integer primary key,
-    userID integer references users,
-    postTime timestamp,
+    user_i_d integer references users,
+    post_time timestamp,
     upvotes integer,
     views integer,
-    isAnswered boolean,
-    acceptedAnswerID integer references answers (id)
+    is_answered boolean,
+    accepted_answer_i_d integer references answers (id)
 );
 
 create table questions_tags(
-    questionID integer references questions (id),
-    tagName varchar references tags,
+    question_i_d integer references questions (id),
+    tag_name varchar references tags,
 
-    primary key (questionID, tagName)
+    primary key (question_i_d, tag_name)
 );
 
 create table questions_answers(
-    questionID integer references questions (id),
-    answerID integer references answers (id),
+    question_i_d integer references questions (id),
+    answer_i_d integer references answers (id),
 
-    primary key (questionID, answerID)
+    primary key (question_i_d, answer_i_d)
 );
 
 create table answers_comments(
-    answerID integer references answers (id),
-    commentID integer references comments (id),
+    answer_i_d integer references answers (id),
+    comment_i_d integer references comments (id),
 
-    primary key (answerID, commentID)
+    primary key (answer_i_d, comment_i_d)
 );
