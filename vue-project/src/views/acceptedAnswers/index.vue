@@ -231,14 +231,14 @@ onBeforeMount(() => {
     let hasAcceptedAnswerNum = 0
     let moreUpvotesNum = 0
     axios
-        .get("/answers/getNum", {
+        .get("/questions/getNum", {
             params: {
                 status: 'hasAnswer'
             }
         })
         .then((response) => {
             hasAnswerNum = response.data
-            return axios.get("/answers/getNum", {
+            return axios.get("/questions/getNum", {
                 params: {
                     status: 'hasAcceptedAnswer'
                 }
@@ -249,7 +249,7 @@ onBeforeMount(() => {
             option1.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
             option2.series.data[0].value = hasAcceptedAnswerNum
             option2.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
-            return axios.get("/answers/getNum", {
+            return axios.get("/questions/getNum", {
                 params: {
                     status: 'moreUpvotes'
                 }

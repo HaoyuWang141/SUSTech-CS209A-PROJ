@@ -1,3 +1,7 @@
+drop database java2_project;
+create database java2_project;
+
+drop table tags, users, answers, comments, questions, questions_answers, questions_tags, answers_comments;
 
 create table tags(
     tagName varchar primary key
@@ -10,7 +14,8 @@ create table users(
 create table answers(
     id integer primary key,
     userID integer references users,
-    postTime timestamp
+    postTime timestamp,
+    upvotes integer
 );
 
 create table comments(
@@ -23,7 +28,7 @@ create table questions(
     id integer primary key,
     userID integer references users,
     postTime timestamp,
-    votes integer,
+    upvotes integer,
     views integer,
     isAnswered boolean,
     acceptedAnswerID integer references answers (id)

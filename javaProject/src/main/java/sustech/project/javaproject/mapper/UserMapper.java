@@ -14,11 +14,11 @@ import sustech.project.javaproject.entity.User;
 public interface UserMapper extends BaseMapper<User> {
 
  // query all users
- @Select("select * from user")
- public List<User> find();
-
- @Insert("insert into user (username,password,birthday) values (#{username},#{password},#{birthday})")
- public int insert(User user);
+ // @Select("select * from user")
+ // public List<User> find();
+ //
+ // @Insert("insert into user (username,password,birthday) values (#{username},#{password},#{birthday})")
+ // public int insert(User user);
 
   @Select("select * from t_user")
   @Results({

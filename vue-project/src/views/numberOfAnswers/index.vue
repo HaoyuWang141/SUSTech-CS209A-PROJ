@@ -17,7 +17,7 @@
                 align="center">
         </el-table-column>
     </el-table>
-    <br /><br />
+    <br/><br/>
     <BaseEchart :chart-id="id3" :option="option3"/>
     <BaseEchart :chart-id="id4" :option="option4"/>
 </template>
@@ -74,7 +74,11 @@ const option1 = reactive({
 
 const tableData = reactive([
     {
-        item: '平均每个问题的回答数',
+        item: '每个问题的平均回答数',
+        number: 0
+    },
+    {
+        item: '最少回答数',
         number: 0
     },
     {
@@ -85,7 +89,7 @@ const tableData = reactive([
 
 const id3 = 'chart3'
 const option3 = reactive({
-    title : {
+    title: {
         text: 'Distribution of Answer Number',
         left: 'center'
     },
@@ -155,7 +159,7 @@ const option4 = reactive({
         // containLabel: true
     },
     xAxis: {
-        type: 'category',
+        type: 'value',
         data: []
     },
     yAxis: {
@@ -186,45 +190,52 @@ const option4 = reactive({
 
 onBeforeMount(() => {
     const axios = getCurrentInstance().appContext.config.globalProperties.$http
-    axios.get("/answers/getNum", {
+    axios.get("/questions/getNum", {
         params: {
             status: 'hasAnswer'
         }
     })
         .then((response) => {
-        option1.series[0].data[0].value = response.data
-        return axios.get("/answers/getNum",
-            {
-                params: {
-                    status: 'all'
-                }
-            })
-    })
+            option1.series[0].data[0].value = response.data
+            return axios.get("/questions/getNum",
+                {
+                    params: {
+                        status: 'all'
+                    }
+                })
+        })
         .then((response) => {
-        option1.series[0].data[1].value = response.data - option1.series[0].data[0].value
-    })
+            option1.series[0].data[1].value = response.data - option1.series[0].data[0].value
+        })
         .catch((error) => {
-        console.log(error)
-    })
+            console.log(error)
+        })
 
-    axios
-        .get("/answers/getNum", {params: {status: 'avgAnswerNum'}})
+    axios.get("/answers/getNum", {params: {status: 'avg'}})
         .then((response) => {
             tableData[0].number = response.data
         })
         .catch((error) => {
-        console.log(error)
-    })
+            console.log(error)
+        })
 
-    axios.get("/answers/getNum", {params: {status: 'maxAnswerNum'}})
+    axios.get("/answers/getNum", {params: {status: 'min'}})
         .then((response) => {
             tableData[1].number = response.data
         })
         .catch((error) => {
-        console.log(error)
-    })
+            console.log(error)
+        })
 
-    axios.get("/answers/ThreadNum-AnswerNum")
+    axios.get("/answers/getNum", {params: {status: 'max'}})
+        .then((response) => {
+            tableData[2].number = response.data
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+    axios.get("/answers/QuestionNum-AnswerNum")
         .then((response) => {
             for (let key in response.data) {
                 option3.xAxis.data.push(key)
@@ -232,8 +243,8 @@ onBeforeMount(() => {
             }
         })
         .catch((error) => {
-        console.log(error)
-    })
+            console.log(error)
+        })
 
     axios.get("/answers/AnswerNum-Time")
         .then((response) => {
@@ -244,8 +255,8 @@ onBeforeMount(() => {
             }
         })
         .catch((error) => {
-        console.log(error)
-    })
+            console.log(error)
+        })
 })
 
 </script>
