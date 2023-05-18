@@ -1,5 +1,35 @@
 # SUSTech-CS209A-Project
 
+## Start
+
+1. git clone 仓库
+2. 运行SpringBoot项目
+3. 运行Vue项目
+   1. 安装node.js
+   2. 进入vue-project文件夹
+   3. 在 git bash 中运行 `npm install`. 该命令用于安装依赖包
+   4. 在 git bash 中运行 `npm run dev`. 该命令用于启动开发环境(即dev), 然后可以用浏览器在指定端口打开页面
+
+
+
+## Task
+
+### 2023-5-18
+
+**已完成:**
+
+1. 数据库部分: ER图, 建表语句, 大部分mapper;
+2. 后端部分: SpringBoot 项目结构, 绝大部分entity, 大部分controller;
+3. 前端部分: 绝大部分网页结构
+
+**待完成:**
+
+1. 爬虫: 爬取数据并存入数据库 (使用云数据库?)
+2. 后端: 需完成controller, 在此过程中顺手更新 数据库表, entity, mapper
+3. 前端: 在后端完全搞定之后, 再小修小改一下
+
+
+
 ## Introduction
 
 
