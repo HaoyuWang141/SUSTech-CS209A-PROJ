@@ -1,77 +1,61 @@
 # SUSTech-CS209A-Project
 
+## Instruction
+
+
+
 ## Start
 
 1. git clone 仓库
-2. 运行SpringBoot项目
-3. 运行Vue项目
-   1. 安装node.js
-   2. 进入vue-project文件夹
-   3. 在 git bash 中运行 `npm install`. 该命令用于安装依赖包
+2. 运行 SpringBoot 项目
+3. 运行 Vue 项目
+   1. 安装 node.js
+   2. 进入 vue-project 文件夹
+   3. 在 git bash 中运行 `npm install`. 该命令用于安装 vue-project 的依赖包
    4. 在 git bash 中运行 `npm run dev`. 该命令用于启动开发环境(即dev), 然后可以用浏览器在指定端口打开页面
 
 
 
-## Task
+## 设计与结构
 
-### 2023-5-18
+### 技术栈
 
-**已完成:**
-
-1. 数据库部分: ER图, 建表语句, 大部分mapper;
-2. 后端部分: SpringBoot 项目结构, 绝大部分entity, 大部分controller;
-3. 前端部分: 绝大部分网页结构
-
-**待完成:**
-
-1. 爬虫: 爬取数据并存入数据库 (使用云数据库?)
-2. 后端: 需完成controller, 在此过程中顺手更新 数据库表, entity, mapper
-3. 前端: 在后端完全搞定之后, 再小修小改一下
-
-
-
-## Introduction
-
-
-
-## 技术栈
-
-### 后端
+#### 后端
 
 + spring boot
 + Restful 风格
-+ MybatisPlus
-+ ApiFox
++ MybatisPlus + PostgreSQL
 
-### 前端
+#### 前端
 
 + Vue
-+ Element UI
-+ Axios
 + Vue Router
++ Axios
++ Element UI
++ Echarts
 
-
-
-## 数据库设计
+### 数据库设计
 
 ![ER graph](img\ER graph.png)
 
-
-
-## Spring Boot 项目结构
+### Spring Boot 项目结构
 
 + config 配置类
 + controller 控制层
 + entity 实体类: 与数据库表一一对应
-+ model: 对entity中的数据进行解释和封装
-+ domain: 对model中的数据进行整合, 最终发送给前端
-+ interceptor 拦截器: 
-+ mapper: 用以 mybatis 映射数据库 
-+ service: 处理业务逻辑
++ mapper: 用以 Mybatis 映射数据库
 
+### Vue 项目结构
 
-
-## Vue 项目结构
++ assets: 全局设置
++ components: 通用组件. 主要包含 Echarts 在 Vue 中的实现
++ icons: 图标
++ layout: 整体布局
+  + Sidebar: 侧边栏
+  + AppMain: 主体内容显示
+  + Navbar: 导航栏
++ router: 路由配置
++ views: 主要视图, 将加载到 AppMain 中
 
 
 
@@ -103,4 +87,22 @@
 1. 用户数量分布+回答者+评论者: 3个直方图 + 表格(avg+max+min)
 2. 用户数量变化: 数量随时间变化: 点线图
 3. 活跃用户(取前十): 环形柱状图
+
+
+
+## Task
+
+### 2023-5-18
+
+**已完成:**
+
+1. 数据库部分: ER图, 建表语句, 大部分mapper;
+2. 后端部分: SpringBoot 项目结构, 绝大部分entity, 大部分controller;
+3. 前端部分: 绝大部分网页结构
+
+**待完成:**
+
+1. 爬虫: 爬取数据并存入数据库 (使用云数据库?)
+2. 后端: 需完成controller, 在此过程中顺手更新 数据库表, entity, mapper
+3. 前端: 在后端完全搞定之后, 再小修小改一下
 
