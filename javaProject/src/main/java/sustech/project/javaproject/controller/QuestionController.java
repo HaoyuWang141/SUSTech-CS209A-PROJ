@@ -54,7 +54,6 @@ public class QuestionController {
         }
         break;
     }
-    // System.out.println(result);
     return result;
   }
 
