@@ -29,19 +29,24 @@ public interface QuestionMapper extends BaseMapper<Question> {
   })
   List<Question> selectQuestions(QueryWrapper<Question> wrapper);
 
-  @Select("")
+  @Select("select (select count(*) from answers) / (select count(*) from questions);")
   Long avgAnswerNum();
 
-  @Select("")
+  @Select("select min(qqc.cnt) from\n" +
+          "(select count(*) cnt\n" +
+          "from questions join questions_answers qa on questions.id = qa.question_i_d\n" +
+          "group by id) as qqc;")
   Long minAnswerNum();
 
-  @Select("")
+  @Select("select max(qqc.cnt) from\n" +
+          "(select count(*) cnt\n" +
+          "from questions join questions_answers qa on questions.id = qa.question_i_d\n" +
+          "group by id) as qqc;")
   Long maxAnswerNum();
 
   @Select("select avg(upvotes) from questions join questions_tags qt on questions.id = qt.questionid where qt.tagName = #{tagName}")
   int selectAvgUpvotesByTag(String tagName);
 
   @Select("select avg(views) from questions join questions_tags qt on questions.id = qt.questionid where qt.tagName = #{tagName}")
-
   int selectAvgViewsByTag(String tagName);
 }

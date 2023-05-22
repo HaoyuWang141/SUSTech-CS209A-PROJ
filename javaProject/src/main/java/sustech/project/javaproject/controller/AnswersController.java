@@ -29,10 +29,18 @@ public class AnswersController {
     long result = 0;
     switch (status) {
       case "avg":
+        // FIXME: 平均值应该是小数，这里是否为方便就取整值做近似？
         result = questionMapper.avgAnswerNum();
         break;
       case "min":
-        result = questionMapper.minAnswerNum();
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("isAnswered", false);
+        List<Question> unansweredQuestions = questionMapper.selectQuestions(queryWrapper);
+        if (!unansweredQuestions.isEmpty())
+          result = 0;
+        else {
+          result = questionMapper.minAnswerNum();
+        }
         break;
       case "max":
         result = questionMapper.maxAnswerNum();

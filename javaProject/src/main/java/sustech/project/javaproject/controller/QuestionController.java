@@ -57,7 +57,6 @@ public class QuestionController {
     return result;
   }
 
-
   /**
    * @return: key: time("mm,yyyy"), value: ThreadNum (per month)
    */
@@ -89,7 +88,6 @@ public class QuestionController {
     }
     return map;
   }
-
 
   @GetMapping("/get")
   public List<Question> getQuestions(String status) {
