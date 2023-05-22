@@ -29,4 +29,8 @@ public interface UserMapper extends BaseMapper<User> {
       many = @Many(select = "sustech.project.javaproject.mapper.OrderMapper.selectByUid"))
   })
   List<User> SelectAllUserAndOrders();
+
+//  @Select("select * from users where id = #{id}")
+//  User selectByID(long id);
+
 }

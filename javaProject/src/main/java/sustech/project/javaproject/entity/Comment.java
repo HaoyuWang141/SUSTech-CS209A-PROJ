@@ -22,4 +22,8 @@ public class Comment {
         Comment comment = (Comment) o;
         return this.id.equals(comment.id);
     }
+
+    public Integer getUserID() {
+        return userID;
+    }
 }

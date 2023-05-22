@@ -30,15 +30,19 @@ public class TagsController {
    */
   @GetMapping("/threadNum-tag")
   public Map<String, Integer> tagFrequenceDistribution() {
+
     Map<String, Integer> map = new LinkedHashMap<>();
-    List<Tag> tags = tagMapper.selectList(null);
-    for (Tag tag : tags) {
-      if (map.containsKey(tag.getTagName())) {
-        map.put(tag.getTagName(), map.get(tag.getTagName()) + 1);
-      } else {
-        map.put(tag.getTagName(), 1);
+
+    List<Question> questions = questionMapper.selectQuestions(null);
+    for (Question question : questions) {
+      for (Tag tag : question.getTags()) {
+        if (map.containsKey(tag.getTagName()))
+          map.put(tag.getTagName(), map.get(tag.getTagName()) + 1);
+        else
+          map.put(tag.getTagName(), 1);
       }
     }
+
     // FIXME
     map.put("java", 5); //
     map.put("cpp", 30); //
