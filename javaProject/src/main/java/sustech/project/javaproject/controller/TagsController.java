@@ -48,6 +48,7 @@ public class TagsController {
     map.put("cpp", 30); //
     map.put("python", 15); //
     map.put("json", 36); //
+    map.put("spring", 20); //
     return map;
   }
 
