@@ -46,6 +46,7 @@ public class TagsController {
     // FIXME
     map.put("java", 5); //
     map.put("cpp", 30); //
+    map.put("python", 15); //
     return map;
   }
 
@@ -70,6 +71,7 @@ public class TagsController {
   @GetMapping("/avgUpvotes-tags")
   public Map<String, Integer> tagsUpvotesDistribution() {
     Map<String, Integer> map = new LinkedHashMap<>();
+
     map.put("java", 10);
     map.put("python", 20);
     map.put("c++", 30);
@@ -91,7 +93,6 @@ public class TagsController {
     }
     return map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(50).collect(
         Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
-
   }
 
   /**
