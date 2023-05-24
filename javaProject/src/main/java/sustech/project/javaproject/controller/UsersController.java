@@ -143,20 +143,6 @@ public class UsersController {
     map.put("avg", avg);
     map.put("min", min);
     map.put("max", max);
-
-//    map.put("avg", 10);  //
-//    map.put("min", 8);  //
-//    map.put("max", 18);  //
-    return map;
-  }
-
-  @GetMapping("/UserNum-Time")
-  public Map<String, Integer> userNumDistribution() {
-    Map<String, Integer> map = new LinkedHashMap<>();
-    map.put("0", 10);
-    map.put("1-5", 20);
-    map.put("6-10", 30);
-    map.put(">10", 10);
     return map;
   }
 
@@ -168,87 +154,4 @@ public class UsersController {
     map.put("c", 30);
     return map;
   }
-
-
-// 以下方法没有体现出与用户的关系？已改写
-
-//  @GetMapping("/usersDistribution")
-//  public Map<String, Integer> usersDistribution(String type)
-  /*{
-    Map<String, Integer> map = new LinkedHashMap<>();
-    map.put("0", 0);
-    map.put("1-5", 0);
-    map.put("6-10", 0);
-    map.put(">10", 0);
-    if (type.equals("all")) {
-      List<Question> questions = questionMapper.selectQuestions(null);
-      for (Question question : questions) {
-        int size = question.getAnswers().size();
-        for (Answer answer : question.getAnswers()) {
-          size += answer.getComments().size();
-        }
-        if (size == 0) {
-          map.put("0", map.get("0") + 1);
-        } else if (size <= 5) {
-          map.put("1-5", map.get("1-5") + 1);
-        } else if (size <= 10) {
-          map.put("6-10", map.get("6-10") + 1);
-        } else {
-          map.put(">10", map.get(">10") + 1);
-        }
-      }
-    }
-    else if (type.equals("answer")) {
-      List<Question> questions = questionMapper.selectQuestions(null);
-      for (Question question : questions) {
-        int size = question.getAnswers().size();
-        if (size == 0) {
-          map.put("0", map.get("0") + 1);
-        } else if (size <= 5) {
-          map.put("1-5", map.get("1-5") + 1);
-        } else if (size <= 10) {
-          map.put("6-10", map.get("6-10") + 1);
-        } else {
-          map.put(">10", map.get(">10") + 1);
-        }
-      }
-    }
-    else if (type.equals("comment")) {
-      List<Question> questions = questionMapper.selectQuestions(null);
-      for (Question question : questions) {
-        int size = 0;
-        for (Answer answer : question.getAnswers()) {
-          size += answer.getComments().size();
-        }
-        if (size == 0) {
-          map.put("0", map.get("0") + 1);
-        } else if (size <= 5) {
-          map.put("1-5", map.get("1-5") + 1);
-        } else if (size <= 10) {
-          map.put("6-10", map.get("6-10") + 1);
-        } else {
-          map.put(">10", map.get(">10") + 1);
-        }
-      }
-    }
-    return map;
-  }*/
-
-//  @GetMapping("/participationAnalysis")
-//  public Map<String, Integer> getParticipationAnalysis(String type)
-  /*{
-    Map<String, Integer> map = new LinkedHashMap<>();
-    if (type.equals("all")) {
-
-    } else if (type.equals("answer")) {
-
-    } else if (type.equals("comment")) {
-
-    }
-    map.put("avg", 10);
-    map.put("min", 8);
-    map.put("max", 18);
-    return map;
-  }*/
-
 }

@@ -1,6 +1,8 @@
 package sustech.project.javaproject.controller;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import sustech.project.javaproject.entity.Question;
 import sustech.project.javaproject.entity.Tag;
 import sustech.project.javaproject.mapper.QuestionMapper;
 import sustech.project.javaproject.mapper.TagMapper;
+import sustech.project.javaproject.model.CombinationOfTags;
 
 @RestController
 @RequestMapping("/tags")
@@ -28,7 +31,7 @@ public class TagsController {
   /**
    * @return key: tag, value: threadNum
    */
-  @GetMapping("/threadNum-tag")
+  @GetMapping("/QuestionNum-tag")
   public Map<String, Integer> tagFrequenceDistribution() {
 
     Map<String, Integer> map = new LinkedHashMap<>();
@@ -36,10 +39,11 @@ public class TagsController {
     List<Question> questions = questionMapper.selectQuestions(null);
     for (Question question : questions) {
       for (Tag tag : question.getTags()) {
-        if (map.containsKey(tag.getTagName()))
+        if (map.containsKey(tag.getTagName())) {
           map.put(tag.getTagName(), map.get(tag.getTagName()) + 1);
-        else
+        } else {
           map.put(tag.getTagName(), 1);
+        }
       }
     }
 
@@ -53,61 +57,187 @@ public class TagsController {
   }
 
   /**
+   * @param CombinationNum 1, 2, 3
    * @return key: one tag, value: average upvotes over thread
    */
   @GetMapping("/avgUpvotes-tag")
-  public Map<String, Integer> tagUpvotesDistribution() {
-    Map<String, Integer> map = new LinkedHashMap<>();
+  public Map<String, Double> tagUpvotesDistribution(String CombinationNum) {
+    Map<String, Double> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
-    for (Tag tag : tags) {
-      int upvotes = questionMapper.selectAvgUpvotesByTag(tag.getTagName());
-      map.put(tag.getTagName(), upvotes);
+    List<CombinationOfTags> list = new ArrayList<>();
+    List<Question> questions = questionMapper.selectQuestions(null);
+
+    switch (CombinationNum) {
+      case "1":
+        for (Tag tag : tags) {
+          map.put(tag.getTagName(), (double) tag.getUpvotes());
+        }
+        break;
+      case "2":
+        tags = tags.stream().sorted(Comparator.comparing(Tag::getUpvotes).reversed())
+            .limit(10).collect(Collectors.toList());
+        for (int i = 0; i < tags.size(); i++) {
+          for (int j = i + 1; j < tags.size(); j++) {
+            CombinationOfTags combinationOfTags = new CombinationOfTags();
+            combinationOfTags.addTag(tags.get(i));
+            combinationOfTags.addTag(tags.get(j));
+            list.add(combinationOfTags);
+          }
+        }
+        for (Question q : questions) {
+          if (q.getTags().size() < 2) {
+            continue;
+          }
+          for (CombinationOfTags c : list) {
+            if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
+              c.setQuestionNum(c.getQuestionNum() + 1);
+              c.setUpvotes(c.getUpvotes() + q.getUpvotes());
+            }
+          }
+        }
+        for (CombinationOfTags c : list) {
+          c.setAvgUpvotes(((double) c.getUpvotes()) / ((double) c.getQuestionNum()));
+          ArrayList<String> tagName = new ArrayList<>();
+          for (Tag tag : c.getTags()) {
+            tagName.add(tag.getTagName());
+          }
+          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+        }
+        break;
+      case "3":
+        tags = tags.stream().sorted(Comparator.comparing(Tag::getUpvotes).reversed())
+            .limit(10).collect(Collectors.toList());
+        for (int i = 0; i < tags.size(); i++) {
+          for (int j = i + 1; j < tags.size(); j++) {
+            for (int k = j + 1; k < tags.size(); k++) {
+              CombinationOfTags combinationOfTags = new CombinationOfTags();
+              combinationOfTags.addTag(tags.get(i));
+              combinationOfTags.addTag(tags.get(j));
+              combinationOfTags.addTag(tags.get(k));
+              list.add(combinationOfTags);
+            }
+          }
+        }
+        for (Question q : questions) {
+          if (q.getTags().size() < 3) {
+            continue;
+          }
+          for (CombinationOfTags c : list) {
+            if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
+              c.setQuestionNum(c.getQuestionNum() + 1);
+              c.setUpvotes(c.getUpvotes() + q.getUpvotes());
+            }
+          }
+        }
+        for (CombinationOfTags c : list) {
+          c.setAvgUpvotes(((double) c.getUpvotes()) / ((double) c.getQuestionNum()));
+          ArrayList<String> tagName = new ArrayList<>();
+          for (Tag tag : c.getTags()) {
+            tagName.add(tag.getTagName());
+          }
+          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+        }
+        break;
+      default:
+        return null;
     }
-    return map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(50).collect(
-        Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+    return map.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        .limit(10)
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+            LinkedHashMap::new));
   }
 
-  /**
-   * @return key: combination of tags, value: average upvotes over thread
-   */
-  @GetMapping("/avgUpvotes-tags")
-  public Map<String, Integer> tagsUpvotesDistribution() {
-    Map<String, Integer> map = new LinkedHashMap<>();
-
-    map.put("java", 10);
-    map.put("python", 20);
-    map.put("c++", 30);
-    map.put("c", 10);
-    map.put("c#", 20);
-    return map;
-  }
 
   /**
    * @return key: one tag, value: average views over thread
    */
   @GetMapping("/avgViews-tag")
-  public Map<String, Integer> tagViewsDistribution() {
-    Map<String, Integer> map = new LinkedHashMap<>();
+  public Map<String, Double> tagViewsDistribution(String CombinationNum) {
+    Map<String, Double> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
-    for (Tag tag : tags) {
-      int views = questionMapper.selectAvgViewsByTag(tag.getTagName());
-      map.put(tag.getTagName(), views);
+    List<CombinationOfTags> list = new ArrayList<>();
+    List<Question> questions = questionMapper.selectQuestions(null);
+
+    switch (CombinationNum) {
+      case "1":
+        for (Tag tag : tags) {
+          map.put(tag.getTagName(), (double) tag.getViews());
+        }
+        break;
+      case "2":
+        tags = tags.stream().sorted(Comparator.comparing(Tag::getViews).reversed())
+            .limit(10).collect(Collectors.toList());
+        for (int i = 0; i < tags.size(); i++) {
+          for (int j = i + 1; j < tags.size(); j++) {
+            CombinationOfTags combinationOfTags = new CombinationOfTags();
+            combinationOfTags.addTag(tags.get(i));
+            combinationOfTags.addTag(tags.get(j));
+            list.add(combinationOfTags);
+          }
+        }
+        for (Question q : questions) {
+          if (q.getTags().size() < 2) {
+            continue;
+          }
+          for (CombinationOfTags c : list) {
+            if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
+              c.setQuestionNum(c.getQuestionNum() + 1);
+              c.setUpvotes(c.getViews() + q.getViews());
+            }
+          }
+        }
+        for (CombinationOfTags c : list) {
+          c.setAvgUpvotes(((double) c.getViews()) / ((double) c.getQuestionNum()));
+          ArrayList<String> tagName = new ArrayList<>();
+          for (Tag tag : c.getTags()) {
+            tagName.add(tag.getTagName());
+          }
+          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+        }
+        break;
+      case "3":
+        tags = tags.stream().sorted(Comparator.comparing(Tag::getViews).reversed())
+            .limit(10).collect(Collectors.toList());
+        for (int i = 0; i < tags.size(); i++) {
+          for (int j = i + 1; j < tags.size(); j++) {
+            for (int k = j + 1; k < tags.size(); k++) {
+              CombinationOfTags combinationOfTags = new CombinationOfTags();
+              combinationOfTags.addTag(tags.get(i));
+              combinationOfTags.addTag(tags.get(j));
+              combinationOfTags.addTag(tags.get(k));
+              list.add(combinationOfTags);
+            }
+          }
+        }
+        for (Question q : questions) {
+          if (q.getTags().size() < 3) {
+            continue;
+          }
+          for (CombinationOfTags c : list) {
+            if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
+              c.setQuestionNum(c.getQuestionNum() + 1);
+              c.setUpvotes(c.getViews() + q.getViews());
+            }
+          }
+        }
+        for (CombinationOfTags c : list) {
+          c.setAvgUpvotes(((double) c.getViews()) / ((double) c.getQuestionNum()));
+          ArrayList<String> tagName = new ArrayList<>();
+          for (Tag tag : c.getTags()) {
+            tagName.add(tag.getTagName());
+          }
+          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+        }
+        break;
+      default:
+        return null;
     }
-    return map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(50).collect(
-        Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+    return map.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        .limit(10)
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+            LinkedHashMap::new));
   }
 
-  /**
-   * @return key: combination of tags, value: average views over thread
-   */
-  @GetMapping("/avgViews-tags")
-  public Map<String, Integer> tagsViewsDistribution() {
-    Map<String, Integer> map = new LinkedHashMap<>();
-    map.put("java", 10);
-    map.put("python", 20);
-    map.put("c++", 30);
-    map.put("c", 10);
-    map.put("c#", 20);
-    return map;
-  }
 }

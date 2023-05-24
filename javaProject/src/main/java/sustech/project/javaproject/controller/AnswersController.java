@@ -25,8 +25,8 @@ public class AnswersController {
   AnswerMapper answerMapper;
 
   @GetMapping("/getNum")
-  public long getNum(String status) {
-    long result = 0;
+  public double getNum(String status) {
+    double result = 0;
     switch (status) {
       case "avg":
         // FIXME: 平均值应该是小数，这里是否为方便就取整值做近似？

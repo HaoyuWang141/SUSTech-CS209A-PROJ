@@ -25,8 +25,8 @@ public class QuestionController {
   AnswerMapper answerMapper;
 
   @GetMapping("/getNum")
-  public long getNum(String status) {
-    long result = 0;
+  public double getNum(String status) {
+    double result = 0;
     QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
     switch (status) {
       case "all":

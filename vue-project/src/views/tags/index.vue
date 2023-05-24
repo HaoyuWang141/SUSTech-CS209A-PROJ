@@ -1976,7 +1976,7 @@ let option5 = {
 
 onBeforeMount(() => {
     const axios = getCurrentInstance().appContext.config.globalProperties.$http
-    axios.get("/tags/threadNum-tag")
+    axios.get("/tags/QuestionNum-tag")
         .then((response) => {
             for (let key in response.data) {
                 option1.series[0].data.push({

@@ -13,7 +13,7 @@ public class Tag {
   @TableField(exist = false)
   private Integer upvotes;
   @TableField(exist = false)
-  private Integer threadNum;
+  private Integer questionNum;
   @TableField(exist = false)
   private Integer views;
 
@@ -23,6 +23,30 @@ public class Tag {
 
   public void setTagName(String tagName) {
     this.tagName = tagName;
+  }
+
+  public Integer getUpvotes() {
+    return upvotes;
+  }
+
+  public void setUpvotes(Integer upvotes) {
+    this.upvotes = upvotes;
+  }
+
+  public Integer getQuestionNum() {
+    return questionNum;
+  }
+
+  public void setQuestionNum(Integer questionNum) {
+    this.questionNum = questionNum;
+  }
+
+  public Integer getViews() {
+    return views;
+  }
+
+  public void setViews(Integer views) {
+    this.views = views;
   }
 
   @Override
