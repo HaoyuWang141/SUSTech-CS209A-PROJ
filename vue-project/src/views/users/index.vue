@@ -31,7 +31,6 @@
         </el-table-column>
     </el-table>
     <BaseEchart :chart-id="id5" :option="option5"/>
-    <BaseEchart :chart-id="id6" :option="option6"/>
 
 </template>
 <script setup>
@@ -196,49 +195,6 @@ const tableData = reactive([])
 const id5 = 'chart5'
 const option5 = reactive({
     title: {
-        text: 'User Number over Time',
-        left: 'center'
-    },
-    grid: {
-        left: '10%',
-        right: '5%',
-        top: '20%',
-        bottom: '20%',
-        // containLabel: true
-    },
-    xAxis: {
-        type: 'category',
-        data: []
-    },
-    yAxis: {
-        type: 'value',
-        axisLine: {
-            show: true,
-        },
-        splitLine: {
-            show: false
-        }
-    },
-    series: [
-        {
-            data: [],
-            type: 'line'
-        }
-    ],
-    visualMap: {
-        show: false,
-        min: 10,
-        max: 30,
-        dimension: 1,
-        inRange: {
-            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
-        }
-    },
-});
-
-const id6 = 'chart6'
-const option6 = reactive({
-    title: {
         text: 'Active Users',
         left: 'center'
     },
@@ -396,24 +352,14 @@ onBeforeMount(() => {
             console.log(error)
         })
 
-    axios.get("/users/UserNum-Time")
-        .then((response) => {
-            for (let key in response.data) {
-                option5.xAxis.data.push(key)
-                option5.series[0].data.push(response.data[key])
-            }
-        }).catch((error) => {
-        console.log(error)
-    })
-
     axios.get("/users/isActive")
         .then((response) => {
-            option6.angleAxis.max = 0
+            option5.angleAxis.max = 0
             for (let key in response.data) {
-                option6.radiusAxis.data.push(key)
-                option6.series.data.push(response.data[key])
-                if (response.data[key] > option6.angleAxis.max) {
-                    option6.angleAxis.max = response.data[key]
+                option5.radiusAxis.data.push(key)
+                option5.series.data.push(response.data[key])
+                if (response.data[key] > option5.angleAxis.max) {
+                    option5.angleAxis.max = response.data[key]
                 }
             }
         }).catch((error) => {

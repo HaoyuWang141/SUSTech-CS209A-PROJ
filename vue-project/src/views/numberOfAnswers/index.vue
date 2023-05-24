@@ -2,7 +2,7 @@
     <BaseEchart :chart-id="id1" :option="option1"/>
     <el-table
             :data="tableData"
-            style="width: 100% ;padding: 10px 0 20px 130px;"
+            style="width: 100% ;padding: 10px 0 20px 180px;"
             class="table"
             :header-cell-style="{'text-align':'center'}">
         <el-table-column
@@ -34,6 +34,7 @@ const option1 = reactive({
     },
     tooltip: {
         trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
     },
     legend: {
         top: '5%',

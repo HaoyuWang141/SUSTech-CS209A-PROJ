@@ -73,7 +73,8 @@ const option2 = reactive({
         left: 'center'
     },
     tooltip: {
-        trigger: 'item'
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
     },
     legend: {
         orient: 'horizontal',
@@ -123,7 +124,8 @@ const option3 = reactive({
         left: 'center'
     },
     tooltip: {
-        trigger: 'item'
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
     },
     legend: {
         orient: 'vertical',

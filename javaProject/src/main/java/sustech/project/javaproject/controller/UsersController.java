@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.*;
 
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,8 +55,7 @@ public class UsersController {
           map.put(">10", map.get(">10") + 1);
         }
       }
-    }
-    else if (type.equals("answer")) {
+    } else if (type.equals("answer")) {
       List<Question> questions = questionMapper.selectQuestions(null);
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
@@ -72,8 +72,7 @@ public class UsersController {
           map.put(">10", map.get(">10") + 1);
         }
       }
-    }
-    else if (type.equals("comment")) {
+    } else if (type.equals("comment")) {
       List<Question> questions = questionMapper.selectQuestions(null);
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
@@ -114,8 +113,7 @@ public class UsersController {
         }
         userAmounts.add(users.size());
       }
-    }
-    else if (type.equals("answer")) {
+    } else if (type.equals("answer")) {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
@@ -123,8 +121,7 @@ public class UsersController {
         }
         userAmounts.add(users.size());
       }
-    }
-    else if (type.equals("comment")) {
+    } else if (type.equals("comment")) {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
@@ -149,9 +146,13 @@ public class UsersController {
   @GetMapping("/isActive")
   public Map<String, Integer> getActiveUser() {
     Map<String, Integer> map = new LinkedHashMap<>();
-    map.put("a", 100);
-    map.put("b", 60);
-    map.put("c", 30);
-    return map;
+    List<User> users = userMapper.selectAll();
+    users.forEach(
+        u -> map.put(u.getUsername(), u.getQestionNum() + u.getAnswerNum() + u.getCommentNum()));
+    return map.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+        .limit(10)
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+            LinkedHashMap::new));
   }
 }
