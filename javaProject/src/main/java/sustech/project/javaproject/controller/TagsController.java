@@ -155,10 +155,10 @@ public class TagsController {
   @GetMapping("/avgViews-tag")
   public Map<String, Double> tagViewsDistribution(String CombinationNum) {
     Map<String, Double> map = new LinkedHashMap<>();
+
     List<Tag> tags = tagMapper.selectList(null);
     List<CombinationOfTags> list = new ArrayList<>();
     List<Question> questions = questionMapper.selectQuestions(null);
-
     switch (CombinationNum) {
       case "1":
         for (Tag tag : tags) {
