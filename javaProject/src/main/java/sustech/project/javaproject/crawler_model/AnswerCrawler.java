@@ -1,4 +1,4 @@
 package sustech.project.javaproject.crawler_model;
 
-public class Answer {
+public class AnswerCrawler {
 }

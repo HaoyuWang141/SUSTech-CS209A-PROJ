@@ -1,8 +1,5 @@
 package sustech.project.javaproject.controller;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.util.*;
 
 import java.util.stream.Collectors;
@@ -148,7 +145,7 @@ public class UsersController {
     Map<String, Integer> map = new LinkedHashMap<>();
     List<User> users = userMapper.selectAll();
     users.forEach(
-        u -> map.put(u.getUsername(), u.getQestionNum() + u.getAnswerNum() + u.getCommentNum()));
+        u -> map.put(u.getUsername(), u.getQuestionNum() + u.getAnswerNum() + u.getCommentNum()));
     return map.entrySet().stream()
         .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
         .limit(10)

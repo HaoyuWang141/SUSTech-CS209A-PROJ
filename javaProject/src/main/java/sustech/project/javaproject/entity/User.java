@@ -15,7 +15,7 @@ public class User {
   private String username;
 
   @TableField(exist = false)
-  private Integer qestionNum;
+  private Integer questionNum;
   @TableField(exist = false)
   private Integer answerNum;
   @TableField(exist = false)
@@ -37,12 +37,12 @@ public class User {
     this.username = username;
   }
 
-  public Integer getQestionNum() {
-    return qestionNum;
+  public Integer getQuestionNum() {
+    return questionNum;
   }
 
-  public void setQestionNum(Integer qestionNum) {
-    this.qestionNum = qestionNum;
+  public void setQuestionNum(Integer questionNum) {
+    this.questionNum = questionNum;
   }
 
   public Integer getAnswerNum() {
