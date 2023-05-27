@@ -33,23 +33,29 @@ public class QuestionController {
         result = questionMapper.selectCount(null);
         break;
       case "hasAnswer":
-        queryWrapper.eq("isAnswered", true);
+        queryWrapper.eq("is_answered", true);
         result = questionMapper.selectCount(queryWrapper);
         break;
       case "hasAcceptedAnswer":
-        queryWrapper.ne("acceptedAnswerID", null);
+        queryWrapper.eq("has_accepted_answer", true);
         result = questionMapper.selectCount(queryWrapper);
         break;
       case "moreUpvotes":
-        queryWrapper.ne("acceptedAnswerID", null);
+        queryWrapper.eq("has_accepted_answer", true);
         List<Question> questions = questionMapper.selectQuestions(queryWrapper);
         for (Question question : questions) {
+          int acceptedAnswerUpvotes = -1;
+          int maxAnswerUpvotes = -1;
           Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerId());
           for (Answer answer : question.getAnswers()) {
-            if (answer.getUpvotes() > acceptedAnswer.getUpvotes()) {
-              result++;
-              break;
+            if (answer.getIsAccepted()) {
+              acceptedAnswerUpvotes = answer.getUpvotes();
+            } else if (answer.getUpvotes() > maxAnswerUpvotes) {
+              maxAnswerUpvotes = answer.getUpvotes();
             }
+          }
+          if (acceptedAnswerUpvotes < maxAnswerUpvotes) {
+            result++;
           }
         }
         break;
@@ -69,7 +75,7 @@ public class QuestionController {
     map.put("2011-2015", 0);
     map.put("2016-2020", 0);
     map.put(">2020", 0);
-    List<Question> questions = questionMapper.selectList(null);
+    List<Question> questions = questionMapper.selectQuestions(null);
     for (Question question : questions) {
       String year = question.getCreationDate().toString().substring(0, 4);
       if (year.compareTo("1999") < 0) {

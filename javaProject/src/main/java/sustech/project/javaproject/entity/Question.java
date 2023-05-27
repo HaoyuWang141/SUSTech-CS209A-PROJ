@@ -33,10 +33,12 @@ public class Question {
   @JsonProperty("is_answered")
   private boolean isAnswered;
 
-  private Integer viewCount;
-
   @TableField(exist = false)
   private Integer acceptedAnswerId;
+
+  private boolean hasAcceptedAnswer;
+
+  private Integer viewCount;
 
   @JsonProperty("score")
   private Integer upvotes;
@@ -101,6 +103,7 @@ public class Question {
 
   public void setAcceptedAnswerId(Integer acceptedAnswerId) {
     this.acceptedAnswerId = acceptedAnswerId;
+    this.hasAcceptedAnswer = acceptedAnswerId != null;
   }
 
   public Integer getUpvotes() {
@@ -143,6 +146,14 @@ public class Question {
     this.tags = tags;
   }
 
+  public boolean gethasAcceptedAnswer() {
+    return hasAcceptedAnswer;
+  }
+
+  public void sethasAcceptedAnswer(boolean hasAcceptedAnswer) {
+    this.hasAcceptedAnswer = hasAcceptedAnswer;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -167,6 +178,7 @@ public class Question {
         "id=" + id +
         ", owner=" + (owner.isPresent() ? owner.get() : "null") +
         ", isAnswered=" + isAnswered +
+        ", hasAcceptedAnswer=" + hasAcceptedAnswer +
         ", viewCount=" + viewCount +
         ", acceptedAnswerId=" + acceptedAnswerId +
         ", upvotes=" + upvotes +

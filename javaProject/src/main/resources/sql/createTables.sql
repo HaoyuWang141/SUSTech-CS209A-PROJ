@@ -19,7 +19,8 @@ create table question
     id                 integer primary key,
     owner_id           integer references t_user,
     is_answered        boolean,
-    viewCount          integer,
+    has_accepted_answer boolean,
+    view_count          integer,
     upvotes            integer,
     creation_date      timestamp
 );

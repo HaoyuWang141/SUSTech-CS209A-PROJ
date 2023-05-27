@@ -19,9 +19,9 @@ import sustech.project.javaproject.entity.Question;
 public class Transfer {
 
   // 定义数据库连接信息
-  private static String url = "jdbc:postgresql://114.132.51.227:5432/java2_project";
-  private static String username = "admin_java2_project";
-  private static String password = "@4Em~hD9EoPkEVEL3tgWY@";
+  private static final String url = "jdbc:postgresql://114.132.51.227:5432/java2_project";
+  private static final String username = "admin_java2_project";
+  private static final String password = "@4Em~hD9EoPkEVEL3tgWY@";
   private static Connection connection = null;
 
   public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class Transfer {
       Class.forName("org.postgresql.Driver");
       connection = DriverManager.getConnection(url, username, password);
       questionTransfer(1);
-      answerTransfer(1);
+      answerTransfer(1, 1);
       commentransfer(1);
     } catch (Exception e) {
       e.printStackTrace();
@@ -44,10 +44,10 @@ public class Transfer {
     }
   }
 
-  private static void questionTransfer(int max) throws Exception {
+  private static void questionTransfer(int questionCount) throws Exception {
     StringBuilder stringBuilder = new StringBuilder();
     List<String> filePath = new ArrayList<>();
-    for (int i = 1; i <= max; i++) {
+    for (int i = 1; i <= questionCount; i++) {
       filePath.add("src/main/resources/data/questions" + i + ".json");
     }
     for (String path : filePath) {
@@ -108,7 +108,8 @@ public class Transfer {
 
     System.out.println("question insert finished");
 
-    preparedStatement = connection.prepareStatement("INSERT INTO question_tag VALUES (?, ?) ON CONFLICT DO NOTHING");
+    preparedStatement = connection.prepareStatement(
+        "INSERT INTO question_tag VALUES (?, ?) ON CONFLICT DO NOTHING");
     for (Question question : questions) {
       for (String tag : question.getTags()) {
         preparedStatement.setInt(1, question.getId());
@@ -120,13 +121,16 @@ public class Transfer {
     System.out.println("question_tag insert finished");
   }
 
-  private static void answerTransfer(int max) throws IOException, SQLException {
+  private static void answerTransfer(int ansCount, int acceptedAnsCount)
+      throws IOException, SQLException {
     StringBuilder stringBuilder = new StringBuilder();
     List<String> filePath = new ArrayList<>();
-    for (int i = 1; i <= max; i++) {
+    for (int i = 1; i <= ansCount; i++) {
       filePath.add("src/main/resources/data/answers" + i + ".json");
     }
-    filePath.add("src/main/resources/data/accepted_answers.json");
+    for (int i = 1; i <= acceptedAnsCount; i++) {
+      filePath.add("src/main/resources/data/accepted_answers" + i + ".json");
+    }
     for (String path : filePath) {
       byte[] bytes = Files.readAllBytes(Paths.get(path));
       String content = new String(bytes);
@@ -173,10 +177,10 @@ public class Transfer {
     System.out.println("answer insert finished");
   }
 
-  private static void commentransfer(int max) throws IOException, SQLException {
+  private static void commentransfer(int commentCount) throws IOException, SQLException {
     StringBuilder stringBuilder = new StringBuilder();
     List<String> filePath = new ArrayList<>();
-    for (int i = 1; i <= max; i++) {
+    for (int i = 1; i <= commentCount; i++) {
       filePath.add("src/main/resources/data/comments" + i + ".json");
     }
     for (String path : filePath) {

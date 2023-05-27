@@ -191,63 +191,34 @@ const option4 = reactive({
 
 onBeforeMount(() => {
     const axios = getCurrentInstance().appContext.config.globalProperties.$http
-    axios.get("/questions/getNum", {
-        params: {
-            status: 'hasAnswer'
-        }
-    })
+    axios.get("/questions/getNum", {params: {status: 'hasAnswer'}})
         .then((response) => {
             option1.series[0].data[0].value = response.data
-            return axios.get("/questions/getNum",
-                {
-                    params: {
-                        status: 'all'
-                    }
-                })
+            return axios.get("/questions/getNum", {params: {status: 'all'}})
         })
         .then((response) => {
             option1.series[0].data[1].value = response.data - option1.series[0].data[0].value
+            return axios.get("/answers/getNum", {params: {status: 'avg'}})
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/answers/getNum", {params: {status: 'avg'}})
         .then((response) => {
             tableData[0].number = response.data
+            return axios.get("/answers/getNum", {params: {status: 'min'}})
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/answers/getNum", {params: {status: 'min'}})
         .then((response) => {
             tableData[1].number = response.data
+            return axios.get("/answers/getNum", {params: {status: 'max'}})
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/answers/getNum", {params: {status: 'max'}})
         .then((response) => {
             tableData[2].number = response.data
+            return axios.get("/answers/QuestionNum-AnswerNum")
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/answers/QuestionNum-AnswerNum")
         .then((response) => {
             for (let key in response.data) {
                 option3.xAxis.data.push(key)
                 option3.series[0].data.push(response.data[key])
             }
+            return axios.get("/answers/AnswerNum-Time")
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/answers/AnswerNum-Time")
         .then((response) => {
             console.log(response.data)
             for (let key in response.data) {

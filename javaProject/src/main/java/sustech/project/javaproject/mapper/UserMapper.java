@@ -16,10 +16,20 @@ public interface UserMapper extends BaseMapper<User> {
 
   @Select("select * from t_user")
   @Results({
-      @Result(property = "id", column = "id"),
-      @Result(property = "qestionNum", column = "id", one = @One(select = "sustech.project.javaproject.mapper.QuestionMapper.countByUserId")),
-      @Result(property = "answerNum", column = "id", one = @One(select = "sustech.project.javaproject.mapper.AnswerMapper.countByUserId")),
-      @Result(property = "commentNum", column = "id", one = @One(select = "sustech.project.javaproject.mapper.CommentMapper.countByUserId"))
+      @Result(property = "accountId", column = "account_id"),
+      @Result(property = "displayName", column = "display_name"),
+      @Result(property = "qestionNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.QuestionMapper.countByUserId")),
+      @Result(property = "answerNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.AnswerMapper.countByUserId")),
+      @Result(property = "commentNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.CommentMapper.countByUserId"))
   })
   public List<User> selectAll();
+
+  @Select("select * from t_user where account_id = #{id} or account_id = -1")
+  @Results({
+      @Result(property = "accountId", column = "account_id"),
+      @Result(property = "questionNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.QuestionMapper.countByUserId")),
+      @Result(property = "answerNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.AnswerMapper.countByUserId")),
+      @Result(property = "commentNum", column = "account_id", one = @One(select = "sustech.project.javaproject.mapper.CommentMapper.countByUserId"))
+  })
+  public User selectById(long id);
 }

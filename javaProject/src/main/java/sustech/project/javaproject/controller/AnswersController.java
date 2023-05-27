@@ -29,18 +29,10 @@ public class AnswersController {
     double result = 0;
     switch (status) {
       case "avg":
-        // FIXME: 平均值应该是小数，这里是否为方便就取整值做近似？
         result = questionMapper.avgAnswerNum();
         break;
       case "min":
-        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("isAnswered", false);
-        List<Question> unansweredQuestions = questionMapper.selectQuestions(queryWrapper);
-        if (!unansweredQuestions.isEmpty())
-          result = 0;
-        else {
-          result = questionMapper.minAnswerNum();
-        }
+        result = questionMapper.minAnswerNum();
         break;
       case "max":
         result = questionMapper.maxAnswerNum();
@@ -58,25 +50,25 @@ public class AnswersController {
     Map<String, Integer> map = new LinkedHashMap<>();
     map.put("0", 0);
     map.put("1-5", 0);
-    map.put("5-10", 0);
-    map.put("10-20", 0);
-    map.put("20-50", 0);
-    map.put(">50", 0);
+    map.put("6-10", 0);
+    map.put("11-20", 0);
+    map.put("21-30", 0);
+    map.put(">30", 0);
     List<Question> questions = questionMapper.selectQuestions(null);
     for (Question question : questions) {
       int ansNum = question.getAnswers().size();
       if (ansNum == 0) {
         map.put("0", map.get("0") + 1);
-      } else if (ansNum < 5) {
-        map.put("<5", map.get("<5") + 1);
-      } else if (ansNum < 10) {
-        map.put("5-10", map.get("5-10") + 1);
-      } else if (ansNum < 20) {
-        map.put("10-20", map.get("10-20") + 1);
-      } else if (ansNum < 50) {
-        map.put("20-50", map.get("20-50") + 1);
+      } else if (ansNum <= 5) {
+        map.put("1-5", map.get("1-5") + 1);
+      } else if (ansNum <= 10) {
+        map.put("6-10", map.get("6-10") + 1);
+      } else if (ansNum <= 20) {
+        map.put("11-20", map.get("11-20") + 1);
+      } else if (ansNum <= 30) {
+        map.put("21-30", map.get("21-30") + 1);
       } else {
-        map.put(">50", map.get(">50") + 1);
+        map.put(">30", map.get(">30") + 1);
       }
     }
     return map;
@@ -113,7 +105,7 @@ public class AnswersController {
 
   /**
    * @return: key: Resolution Time, value: ThreadNum
-   * @ResolutionTime: "1 day", "10 days", "1 month", "6 months", "1 year", "more than 1 year"
+   * @ResolutionTime: "1 day", "1 week", "1 month", "1 year", "more than 1 year"
    */
   @GetMapping("/ThreadNum-ResolutionTime")
   public Map<String, Integer> resolutionTimeDistribution() {
@@ -127,10 +119,23 @@ public class AnswersController {
     wrapper.eq("isAnswered", true);
     List<Question> questions = questionMapper.selectQuestions(wrapper);
     for (Question question : questions) {
-      Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerId());
+      if (!question.gethasAcceptedAnswer()) {
+        continue;
+      }
+      List<Answer> answers = answerMapper.selectByQuestionId(question.getId());
+      Answer acceptedAnswer = null;
+      for (Answer answer : answers) {
+        if (answer.getIsAccepted()) {
+          acceptedAnswer = answer;
+          break;
+        }
+      }
+      if (acceptedAnswer == null) {
+        continue;
+      }
       int resolutionTime = (int) (
-          (acceptedAnswer.getCreationDate().getTime() - question.getCreationDate().getTime()) / (1000 * 60
-              * 60 * 24));
+          (acceptedAnswer.getCreationDate().getTime() - question.getCreationDate().getTime()) / (
+              1000 * 60 * 60 * 24));
       if (resolutionTime < 1) {
         map.put("<1 day", map.get("<1 day") + 1);
       } else if (resolutionTime < 7) {

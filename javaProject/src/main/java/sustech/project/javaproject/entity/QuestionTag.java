@@ -13,10 +13,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class QuestionTag {
 
-  @TableId
   private Integer questionId;
 
-  @TableId
   private String tagName;
 
   public Integer getQuestionId() {
