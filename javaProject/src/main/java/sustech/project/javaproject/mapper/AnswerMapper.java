@@ -12,7 +12,7 @@ import sustech.project.javaproject.entity.Answer;
 @Mapper
 public interface AnswerMapper extends BaseMapper<Answer> {
 
-  @Select("select * from answers join questions_answers on id = answerID where questionID = #{questionID}")
+  @Select("select * from answer join questions_answers on id = answerID where questionID = #{questionID}")
   @Results({
       @Result(column = "id", property = "id"),
       @Result(column = "userID", property = "userID"),

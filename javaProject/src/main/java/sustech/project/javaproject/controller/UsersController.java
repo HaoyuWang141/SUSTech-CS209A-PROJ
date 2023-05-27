@@ -37,10 +37,10 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();  // FIXME: 此处用HashSet可能导致需重写User的toHash()方法
         for (Answer answer : question.getAnswers()) {
-          users.add(userMapper.selectById(answer.getUserID()));
-          for (Comment comment : answer.getComments()) {
-            users.add(userMapper.selectById(comment.getUserID()));
-          }
+          users.add(userMapper.selectById(answer.getOwner().getAccountId()));
+          // for (Comment comment : answer.getComments()) {
+          //   users.add(userMapper.selectById(comment.getUserID()));
+          // }
         }
         if (users.size() == 0) {
           map.put("0", map.get("0") + 1);
@@ -57,7 +57,7 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
-          users.add(userMapper.selectById(answer.getUserID()));
+          users.add(userMapper.selectById(answer.getOwner().getAccountId()));
         }
         if (users.size() == 0) {
           map.put("0", map.get("0") + 1);
@@ -74,9 +74,9 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
-          for (Comment comment : answer.getComments()) {
-            users.add(userMapper.selectById(comment.getUserID()));
-          }
+          // for (Comment comment : answer.getComments()) {
+          //   users.add(userMapper.selectById(comment.getUserID()));
+          // }
         }
         if (users.size() == 0) {
           map.put("0", map.get("0") + 1);
@@ -103,10 +103,10 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
-          users.add(userMapper.selectById(answer.getUserID()));
-          for (Comment comment : answer.getComments()) {
-            users.add(userMapper.selectById(comment.getUserID()));
-          }
+          users.add(userMapper.selectById(answer.getOwner().getAccountId()));
+          // for (Comment comment : answer.getComments()) {
+          //   users.add(userMapper.selectById(comment.getUserID()));
+          // }
         }
         userAmounts.add(users.size());
       }
@@ -114,7 +114,7 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
-          users.add(userMapper.selectById(answer.getUserID()));
+          users.add(userMapper.selectById(answer.getOwner().getAccountId()));
         }
         userAmounts.add(users.size());
       }
@@ -122,9 +122,9 @@ public class UsersController {
       for (Question question : questions) {
         Set<User> users = new HashSet<>();
         for (Answer answer : question.getAnswers()) {
-          for (Comment comment : answer.getComments()) {
-            users.add(userMapper.selectById(comment.getUserID()));
-          }
+          // for (Comment comment : answer.getComments()) {
+          //   users.add(userMapper.selectById(comment.getUserID()));
+          // }
         }
         userAmounts.add(users.size());
       }
@@ -145,7 +145,8 @@ public class UsersController {
     Map<String, Integer> map = new LinkedHashMap<>();
     List<User> users = userMapper.selectAll();
     users.forEach(
-        u -> map.put(u.getUsername(), u.getQuestionNum() + u.getAnswerNum() + u.getCommentNum()));
+        u -> map.put(u.getDisplayName(),
+            u.getQuestionNum() + u.getAnswerNum() + u.getCommentNum()));
     return map.entrySet().stream()
         .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
         .limit(10)

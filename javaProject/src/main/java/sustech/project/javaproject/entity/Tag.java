@@ -4,16 +4,24 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-@TableName("tags")
+@TableName("tag")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Tag {
 
-  @TableId(type = IdType.AUTO)
+  @TableId
   private String tagName;
-  @TableField(exist = false)
-  private Integer upvotes;
+
   @TableField(exist = false)
   private Integer questionNum;
+
+  @TableField(exist = false)
+  private Integer upvotes;
+
   @TableField(exist = false)
   private Integer views;
 

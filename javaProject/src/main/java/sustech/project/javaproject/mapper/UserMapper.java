@@ -14,7 +14,7 @@ import sustech.project.javaproject.entity.User;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-  @Select("select * from users")
+  @Select("select * from t_user")
   @Results({
       @Result(property = "id", column = "id"),
       @Result(property = "qestionNum", column = "id", one = @One(select = "sustech.project.javaproject.mapper.QuestionMapper.countByUserId")),

@@ -93,7 +93,7 @@ public class AnswersController {
     map.put(">2020", 0);
     List<Answer> answers = answerMapper.selectList(null);
     for (Answer answer : answers) {
-      int year = answer.getPostTime().toLocalDateTime().getYear();
+      int year = answer.getCreationDate().toLocalDateTime().getYear();
       if (year < 1999) {
         map.put("<1999", map.get("<1999") + 1);
       } else if (year < 2006) {
@@ -127,9 +127,9 @@ public class AnswersController {
     wrapper.eq("isAnswered", true);
     List<Question> questions = questionMapper.selectQuestions(wrapper);
     for (Question question : questions) {
-      Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerID());
+      Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerId());
       int resolutionTime = (int) (
-          (acceptedAnswer.getPostTime().getTime() - question.getPostTime().getTime()) / (1000 * 60
+          (acceptedAnswer.getCreationDate().getTime() - question.getCreationDate().getTime()) / (1000 * 60
               * 60 * 24));
       if (resolutionTime < 1) {
         map.put("<1 day", map.get("<1 day") + 1);

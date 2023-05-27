@@ -44,7 +44,7 @@ public class QuestionController {
         queryWrapper.ne("acceptedAnswerID", null);
         List<Question> questions = questionMapper.selectQuestions(queryWrapper);
         for (Question question : questions) {
-          Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerID());
+          Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerId());
           for (Answer answer : question.getAnswers()) {
             if (answer.getUpvotes() > acceptedAnswer.getUpvotes()) {
               result++;
@@ -71,7 +71,7 @@ public class QuestionController {
     map.put(">2020", 0);
     List<Question> questions = questionMapper.selectList(null);
     for (Question question : questions) {
-      String year = question.getPostTime().toString().substring(0, 4);
+      String year = question.getCreationDate().toString().substring(0, 4);
       if (year.compareTo("1999") < 0) {
         map.put("<1999", map.get("<1999") + 1);
       } else if (year.compareTo("2000") >= 0 && year.compareTo("2005") <= 0) {

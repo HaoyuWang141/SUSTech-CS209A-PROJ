@@ -1,40 +1,49 @@
 package sustech.project.javaproject.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Objects;
 
-@TableName("users")
+@TableName("t_user")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class User {
 
-  @TableId(type = IdType.AUTO)
-  private Integer id;
+  @TableId
+  @JsonProperty("account_id")
+  private Integer accountId;
 
-  private String username;
+  @JsonProperty("display_name")
+  private String displayName;
 
   @TableField(exist = false)
   private Integer questionNum;
+
   @TableField(exist = false)
   private Integer answerNum;
+
   @TableField(exist = false)
   private Integer commentNum;
 
-  public Integer getId() {
-    return id;
+  public Integer getAccountId() {
+    return accountId;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setAccountId(Integer accountId) {
+    this.accountId = accountId;
   }
 
-  public String getUsername() {
-    return username;
+  public String getDisplayName() {
+    return displayName;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
   public Integer getQuestionNum() {
@@ -70,11 +79,22 @@ public class User {
       return false;
     }
     User user = (User) o;
-    return id.equals(user.id);
+    return accountId.equals(user.accountId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(accountId);
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "accountId=" + accountId +
+        ", displayName='" + displayName + '\'' +
+        ", questionNum=" + questionNum +
+        ", answerNum=" + answerNum +
+        ", commentNum=" + commentNum +
+        '}';
   }
 }

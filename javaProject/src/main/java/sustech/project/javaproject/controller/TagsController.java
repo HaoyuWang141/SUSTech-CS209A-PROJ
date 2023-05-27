@@ -37,12 +37,13 @@ public class TagsController {
     Map<String, Integer> map = new LinkedHashMap<>();
 
     List<Question> questions = questionMapper.selectQuestions(null);
+    List<Tag> tags = tagMapper.selectList(null);
     for (Question question : questions) {
-      for (Tag tag : question.getTags()) {
-        if (map.containsKey(tag.getTagName())) {
-          map.put(tag.getTagName(), map.get(tag.getTagName()) + 1);
+      for (String tag : question.getTags()) {
+        if (map.containsKey(tag)) {
+          map.put(tag, map.get(tag) + 1);
         } else {
-          map.put(tag.getTagName(), 1);
+          map.put(tag, 1);
         }
       }
     }
@@ -183,7 +184,7 @@ public class TagsController {
           for (CombinationOfTags c : list) {
             if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
               c.setQuestionNum(c.getQuestionNum() + 1);
-              c.setUpvotes(c.getViews() + q.getViews());
+              c.setUpvotes(c.getViews() + q.getViewCount());
             }
           }
         }
@@ -217,7 +218,7 @@ public class TagsController {
           for (CombinationOfTags c : list) {
             if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
               c.setQuestionNum(c.getQuestionNum() + 1);
-              c.setUpvotes(c.getViews() + q.getViews());
+              c.setUpvotes(c.getViews() + q.getViewCount());
             }
           }
         }
