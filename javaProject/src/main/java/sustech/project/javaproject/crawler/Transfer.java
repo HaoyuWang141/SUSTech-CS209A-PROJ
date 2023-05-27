@@ -1,5 +1,6 @@
 package sustech.project.javaproject.crawler;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import java.io.IOException;
@@ -41,9 +42,25 @@ public class Transfer {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-    }
-  }
+=======
+import com.google.gson.Gson;
+import sustech.project.javaproject.crawler_model.JsonQuestion;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class Transfer {
+
+    static JsonQuestion[] transferQuestion() throws FileNotFoundException {
+        Gson gson = new Gson();
+        BufferedReader in = new BufferedReader(new FileReader("./src/data/questions.json"));
+        JsonQuestion[] questions = gson.fromJson(in, JsonQuestion[].class);
+        return questions;
+>>>>>>> ab8dd918d9526f74162d5fbdc2448c207c76f013
+    }
+
+<<<<<<< HEAD
   private static void questionTransfer(int questionCount) throws Exception {
     StringBuilder stringBuilder = new StringBuilder();
     List<String> filePath = new ArrayList<>();
@@ -226,5 +243,8 @@ public class Transfer {
 
     System.out.println("comment insert finished");
   }
+=======
+
+>>>>>>> ab8dd918d9526f74162d5fbdc2448c207c76f013
 
 }
