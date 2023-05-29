@@ -118,11 +118,11 @@ public class TextGenerator {
 
     static void writeAnswerComment() throws IOException {
 
-        BufferedWriter out = new BufferedWriter(new FileWriter("./src/main/resources/data/raw_comments_c0_c199.txt"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("./src/main/resources/data/raw_comments_c200_c399.txt"));
         JsonQuestion[] questions = Transfer.transferQuestion();
         JsonAnswer[] answers = Transfer.transferAnswer();
 
-        for (int t = 0; t < 200; t++) {
+        for (int t = 200; t < 400; t++) {
 
             List<JsonAnswer> answerList = new ArrayList<>();
             for (JsonAnswer answer : answers) {
