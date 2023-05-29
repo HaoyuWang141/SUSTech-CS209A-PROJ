@@ -1,12 +1,11 @@
 package sustech.project.javaproject.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.Objects;
 
 @TableName("tag")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,14 +15,11 @@ public class Tag {
   @TableId
   private String tagName;
 
-  @TableField(exist = false)
-  private Integer questionNum;
+  private Integer questionNumber;
 
-  @TableField(exist = false)
-  private Integer upvotes;
+  private Integer avgViews;
 
-  @TableField(exist = false)
-  private Integer views;
+  private Integer avgUpvotes;
 
   public String getTagName() {
     return tagName;
@@ -33,28 +29,28 @@ public class Tag {
     this.tagName = tagName;
   }
 
-  public Integer getUpvotes() {
-    return upvotes;
+  public Integer getAvgUpvotes() {
+    return avgUpvotes;
   }
 
-  public void setUpvotes(Integer upvotes) {
-    this.upvotes = upvotes;
+  public void setAvgUpvotes(Integer avgUpvotes) {
+    this.avgUpvotes = avgUpvotes;
   }
 
-  public Integer getQuestionNum() {
-    return questionNum;
+  public Integer getQuestionNumber() {
+    return questionNumber;
   }
 
-  public void setQuestionNum(Integer questionNum) {
-    this.questionNum = questionNum;
+  public void setQuestionNumber(Integer questionNumber) {
+    this.questionNumber = questionNumber;
   }
 
-  public Integer getViews() {
-    return views;
+  public Integer getAvgViews() {
+    return avgViews;
   }
 
-  public void setViews(Integer views) {
-    this.views = views;
+  public void setAvgViews(Integer avgViews) {
+    this.avgViews = avgViews;
   }
 
   @Override
@@ -69,4 +65,18 @@ public class Tag {
     return this.tagName.equals(tag.tagName);
   }
 
+  @Override
+  public int hashCode() {
+    return Objects.hash(tagName);
+  }
+
+  @Override
+  public String toString() {
+    return "Tag{" +
+        "tagName='" + tagName + '\'' +
+        ", questionNumber=" + questionNumber +
+        ", avgViews=" + avgViews +
+        ", avgUpvotes=" + avgUpvotes +
+        '}';
+  }
 }

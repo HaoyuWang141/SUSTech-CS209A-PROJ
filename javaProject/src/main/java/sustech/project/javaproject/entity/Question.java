@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +26,7 @@ public class Question {
   @JsonProperty("question_id")
   private Integer id;
 
+  @TableField(exist = false)
   private User owner;
 
   @JsonProperty("is_answered")
@@ -35,6 +34,12 @@ public class Question {
 
   @TableField(exist = false)
   private Integer acceptedAnswerId;
+
+  @TableField(exist = false)
+  private Answer acceptedAnswer;
+
+  @TableField(exist = false)
+  private Integer resolutionTime;
 
   private boolean hasAcceptedAnswer;
 
@@ -55,10 +60,46 @@ public class Question {
   @TableField(exist = false)
   private List<String> tags;
 
+  private Integer answerCount;
+
+  private Integer commentCount;
+
+  public Integer getResolutionTime() {
+    return resolutionTime;
+  }
+
+  public void setResolutionTime(Integer resolutionTime) {
+    this.resolutionTime = resolutionTime;
+  }
+
+  public Integer getAnswerCount() {
+    return answerCount;
+  }
+
+  public void setAnswerCount(Integer answerCount) {
+    this.answerCount = answerCount;
+  }
+
+  public Integer getCommentCount() {
+    return commentCount;
+  }
+
+  public void setCommentCount(Integer commentCount) {
+    this.commentCount = commentCount;
+  }
+
   public Question() {
     answers = new ArrayList<>();
     comments = new ArrayList<>();
     tags = new ArrayList<>();
+  }
+
+  public Answer getAcceptedAnswer() {
+    return acceptedAnswer;
+  }
+
+  public void setAcceptedAnswer(Answer acceptedAnswer) {
+    this.acceptedAnswer = acceptedAnswer;
   }
 
   public Integer getId() {
@@ -146,11 +187,11 @@ public class Question {
     this.tags = tags;
   }
 
-  public boolean gethasAcceptedAnswer() {
+  public boolean getHasAcceptedAnswer() {
     return hasAcceptedAnswer;
   }
 
-  public void sethasAcceptedAnswer(boolean hasAcceptedAnswer) {
+  public void setHasAcceptedAnswer(boolean hasAcceptedAnswer) {
     this.hasAcceptedAnswer = hasAcceptedAnswer;
   }
 
@@ -176,16 +217,18 @@ public class Question {
     Optional<User> owner = Optional.ofNullable(this.owner);
     return "Question{" +
         "id=" + id +
-        ", owner=" + (owner.isPresent() ? owner.get() : "null") +
+        ", owner=" + owner.map(User::getAccountId).orElse(null) +
         ", isAnswered=" + isAnswered +
+        ", acceptedAnswerId=" + acceptedAnswerId +
         ", hasAcceptedAnswer=" + hasAcceptedAnswer +
         ", viewCount=" + viewCount +
-        ", acceptedAnswerId=" + acceptedAnswerId +
         ", upvotes=" + upvotes +
         ", creationDate=" + creationDate +
-        ", answers=" + answers.toString() +
-        ", comments=" + comments.toString() +
+        ", answers=" + answers +
+        ", comments=" + comments +
         ", tags=" + tags.toString() +
+        ", answerCount=" + answerCount +
+        ", commentCount=" + commentCount +
         '}';
   }
 }

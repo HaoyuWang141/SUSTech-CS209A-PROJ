@@ -5,13 +5,19 @@ drop table tag, t_user, answer, comment, question, question_tag;
 
 create table tag
 (
-    tag_name varchar primary key
+    tag_name varchar primary key,
+    question_number integer,
+    avg_views integer,
+    avg_upvotes integer
 );
 
 create table t_user
 (
     account_id   integer primary key,
-    display_name varchar
+    display_name varchar,
+    question_number integer,
+    answer_number integer,
+    comment_number integer
 );
 
 create table question
@@ -22,7 +28,9 @@ create table question
     has_accepted_answer boolean,
     view_count          integer,
     upvotes            integer,
-    creation_date      timestamp
+    creation_date      timestamp,
+    answer_count       integer,
+    comment_count      integer
 );
 
 create table answer

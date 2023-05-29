@@ -21,14 +21,11 @@ public class User {
   @JsonProperty("display_name")
   private String displayName;
 
-  @TableField(exist = false)
-  private Integer questionNum;
+  private Integer questionNumber;
 
-  @TableField(exist = false)
-  private Integer answerNum;
+  private Integer answerNumber;
 
-  @TableField(exist = false)
-  private Integer commentNum;
+  private Integer commentNumber;
 
   public Integer getAccountId() {
     return accountId;
@@ -46,28 +43,28 @@ public class User {
     this.displayName = displayName;
   }
 
-  public Integer getQuestionNum() {
-    return questionNum;
+  public Integer getQuestionNumber() {
+    return questionNumber;
   }
 
-  public void setQuestionNum(Integer questionNum) {
-    this.questionNum = questionNum;
+  public void setQuestionNumber(Integer questionNumber) {
+    this.questionNumber = questionNumber;
   }
 
-  public Integer getAnswerNum() {
-    return answerNum;
+  public Integer getAnswerNumber() {
+    return answerNumber;
   }
 
-  public void setAnswerNum(Integer answerNum) {
-    this.answerNum = answerNum;
+  public void setAnswerNumber(Integer answerNumber) {
+    this.answerNumber = answerNumber;
   }
 
-  public Integer getCommentNum() {
-    return commentNum;
+  public Integer getCommentNumber() {
+    return commentNumber;
   }
 
-  public void setCommentNum(Integer commentNum) {
-    this.commentNum = commentNum;
+  public void setCommentNumber(Integer commentNumber) {
+    this.commentNumber = commentNumber;
   }
 
   @Override
@@ -92,9 +89,9 @@ public class User {
     return "User{" +
         "accountId=" + accountId +
         ", displayName='" + displayName + '\'' +
-        ", questionNum=" + questionNum +
-        ", answerNum=" + answerNum +
-        ", commentNum=" + commentNum +
+        ", questionNum=" + questionNumber +
+        ", answerNum=" + answerNumber +
+        ", commentNum=" + commentNumber +
         '}';
   }
 }

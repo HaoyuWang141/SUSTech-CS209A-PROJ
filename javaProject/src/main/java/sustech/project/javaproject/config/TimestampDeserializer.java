@@ -13,7 +13,7 @@ public class TimestampDeserializer extends JsonDeserializer<Timestamp> {
   @Override
   public Timestamp deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
       throws IOException, JsonProcessingException {
-    long time = jsonParser.getLongValue();
+    long time = jsonParser.getLongValue() * 1000;
     return new Timestamp(time);
   }
 }

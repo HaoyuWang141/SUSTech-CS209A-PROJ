@@ -1,6 +1,7 @@
 package sustech.project.javaproject.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sustech.project.javaproject.JavaProjectApplication;
 import sustech.project.javaproject.entity.Answer;
 import sustech.project.javaproject.entity.Question;
 import sustech.project.javaproject.mapper.AnswerMapper;
@@ -25,8 +27,8 @@ public class QuestionController {
   AnswerMapper answerMapper;
 
   @GetMapping("/getNum")
-  public double getNum(String status) {
-    double result = 0;
+  public long getNum(String status) {
+    long result = 0;
     QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
     switch (status) {
       case "all":
@@ -41,25 +43,10 @@ public class QuestionController {
         result = questionMapper.selectCount(queryWrapper);
         break;
       case "moreUpvotes":
-        queryWrapper.eq("has_accepted_answer", true);
-        List<Question> questions = questionMapper.selectQuestions(queryWrapper);
-        for (Question question : questions) {
-          int acceptedAnswerUpvotes = -1;
-          int maxAnswerUpvotes = -1;
-          Answer acceptedAnswer = answerMapper.selectById(question.getAcceptedAnswerId());
-          for (Answer answer : question.getAnswers()) {
-            if (answer.getIsAccepted()) {
-              acceptedAnswerUpvotes = answer.getUpvotes();
-            } else if (answer.getUpvotes() > maxAnswerUpvotes) {
-              maxAnswerUpvotes = answer.getUpvotes();
-            }
-          }
-          if (acceptedAnswerUpvotes < maxAnswerUpvotes) {
-            result++;
-          }
-        }
+        result = questionMapper.countMoreUpvotes();
         break;
     }
+    System.out.println(status + " answer number: " + result);
     return result;
   }
 
@@ -69,56 +56,48 @@ public class QuestionController {
   @GetMapping("/QuestionNum-Time")
   public Map<String, Integer> questionNumDistribution() {
     Map<String, Integer> map = new LinkedHashMap<>();
-    map.put("<1999", 0);
-    map.put("2000-2005", 0);
-    map.put("2006-2010", 0);
+    map.put("2008-2010", 0);
     map.put("2011-2015", 0);
     map.put("2016-2020", 0);
-    map.put(">2020", 0);
-    List<Question> questions = questionMapper.selectQuestions(null);
+    map.put("2020-2023", 0);
+    List<Question> questions = questionMapper.selectList(null);
     for (Question question : questions) {
       String year = question.getCreationDate().toString().substring(0, 4);
-      if (year.compareTo("1999") < 0) {
-        map.put("<1999", map.get("<1999") + 1);
-      } else if (year.compareTo("2000") >= 0 && year.compareTo("2005") <= 0) {
-        map.put("2000-2005", map.get("2000-2005") + 1);
-      } else if (year.compareTo("2006") >= 0 && year.compareTo("2010") <= 0) {
-        map.put("2006-2010", map.get("2006-2010") + 1);
+      if (year.compareTo("2008") >= 0 && year.compareTo("2010") <= 0) {
+        map.put("2008-2010", map.get("2008-2010") + 1);
       } else if (year.compareTo("2011") >= 0 && year.compareTo("2015") <= 0) {
         map.put("2011-2015", map.get("2011-2015") + 1);
       } else if (year.compareTo("2016") >= 0 && year.compareTo("2020") <= 0) {
         map.put("2016-2020", map.get("2016-2020") + 1);
-      } else {
-        map.put(">2020", map.get(">2020") + 1);
+      } else if (year.compareTo("2020") >= 0 && year.compareTo("2023") <= 0) {
+        map.put("2020-2023", map.get("2020-2023") + 1);
       }
     }
+    System.out.println("QuestionNum-Time: " + map);
     return map;
   }
 
   @GetMapping("/get")
   public List<Question> getQuestions(String status) {
-    List<Question> questions = null;
+    List<Question> questions = new ArrayList<>();
     QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
     switch (status) {
       case "all":
-        questions = questionMapper.selectQuestions(null);
         break;
       case "has answer":
-        queryWrapper.eq("isAnswered", true);
-        questions = questionMapper.selectQuestions(queryWrapper);
+        questions = questions.stream().filter(Question::getIsAnswered).toList();
         break;
       case "has no answer":
-        queryWrapper.eq("isAnswered", false);
-        questions = questionMapper.selectQuestions(queryWrapper);
+        questions = questions.stream().filter(q -> !q.getIsAnswered()).toList();
         break;
       case "has accepted answer":
-        queryWrapper.ne("acceptedAnswerID", null);
-        questions = questionMapper.selectQuestions(queryWrapper);
+        questions = questions.stream().filter(Question::getHasAcceptedAnswer).toList();
         break;
       case "has no accepted answer":
-        queryWrapper.eq("acceptedAnswerID", null);
-        questions = questionMapper.selectQuestions(queryWrapper);
+        questions = questions.stream().filter(q -> !q.getHasAcceptedAnswer()).toList();
         break;
+      default:
+        return null;
     }
     return questions;
   }

@@ -15,7 +15,7 @@ public interface AnswerMapper extends BaseMapper<Answer> {
 
   @Select("select * from answer where question_id = #{questionId}")
   @Results({
-      @Result(property = "id", column = "answer_id"),
+      @Result(property = "id", column = "id"),
       @Result(property = "questionId", column = "question_id"),
       @Result(property = "owner", column = "owner_id", one = @One(select = "sustech.project.javaproject.mapper.UserMapper.selectById")),
       @Result(property = "creationDate", column = "creation_date"),
@@ -26,4 +26,7 @@ public interface AnswerMapper extends BaseMapper<Answer> {
 
   @Select("select count(*) from answer where owner_id = #{userId}")
   int countByUserId(int userId);
+
+  @Select("select count(*) from answer where question_id = #{questionId}")
+  int countByQuestionId(int questionId);
 }

@@ -23,6 +23,7 @@ public class Comment {
   @JsonProperty("comment_id")
   private Integer id;
 
+  @JsonProperty("post_id")
   private Integer questionId;
 
   @TableField(exist = false)
@@ -52,7 +53,7 @@ public class Comment {
   }
 
   public void setOwner(User owner) {
-    if (owner != null || owner.getAccountId() != null) {
+    if (owner == null || owner.getAccountId() == null) {
       this.owner = null;
       return;
     }

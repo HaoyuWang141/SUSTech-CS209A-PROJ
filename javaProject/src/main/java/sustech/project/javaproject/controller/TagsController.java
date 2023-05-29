@@ -1,5 +1,6 @@
 package sustech.project.javaproject.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sustech.project.javaproject.entity.Question;
 import sustech.project.javaproject.entity.Tag;
-import sustech.project.javaproject.mapper.QuestionMapper;
 import sustech.project.javaproject.mapper.TagMapper;
 import sustech.project.javaproject.model.CombinationOfTags;
 
@@ -25,35 +25,28 @@ public class TagsController {
 
   @Autowired
   private TagMapper tagMapper;
-  @Autowired
-  private QuestionMapper questionMapper;
+
+  public static List<Question> QUESTIONS_WITH_TAGS;
 
   /**
    * @return key: tag, value: threadNum
    */
   @GetMapping("/QuestionNum-tag")
-  public Map<String, Integer> tagFrequenceDistribution() {
-
+  public Map<String, Integer> tagFrequencyDistribution() {
     Map<String, Integer> map = new LinkedHashMap<>();
-
-    List<Question> questions = questionMapper.selectQuestions(null);
-    List<Tag> tags = tagMapper.selectList(null);
-    for (Question question : questions) {
-      for (String tag : question.getTags()) {
-        if (map.containsKey(tag)) {
-          map.put(tag, map.get(tag) + 1);
-        } else {
-          map.put(tag, 1);
-        }
+    QueryWrapper<Tag> queryWrapper = new QueryWrapper<>();
+    queryWrapper.orderByDesc("question_number");
+    queryWrapper.last("limit 100");
+    List<Tag> tags = tagMapper.selectList(queryWrapper);
+    for (Tag tag : tags) {
+      if (tag.getTagName().equals("java")) {
+        continue;
       }
+      map.put(tag.getTagName(), tag.getQuestionNumber());
     }
-
-    // FIXME
-    map.put("java", 5); //
-    map.put("cpp", 30); //
-    map.put("python", 15); //
-    map.put("json", 36); //
-    map.put("spring", 20); //
+    System.out.println("QuestionNum-tag");
+    // System.out.println(map);
+    System.out.println();
     return map;
   }
 
@@ -62,21 +55,24 @@ public class TagsController {
    * @return key: one tag, value: average upvotes over thread
    */
   @GetMapping("/avgUpvotes-tag")
-  public Map<String, Double> tagUpvotesDistribution(String CombinationNum) {
-    Map<String, Double> map = new LinkedHashMap<>();
+  public Map<String, Integer> tagUpvotesDistribution(String CombinationNum) {
+    long startTime = System.currentTimeMillis();
+    Map<String, Integer> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
     List<CombinationOfTags> list = new ArrayList<>();
-    List<Question> questions = questionMapper.selectQuestions(null);
-
+    List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
     switch (CombinationNum) {
       case "1":
         for (Tag tag : tags) {
-          map.put(tag.getTagName(), (double) tag.getUpvotes());
+          map.put(tag.getTagName(), tag.getAvgUpvotes());
         }
         break;
       case "2":
-        tags = tags.stream().sorted(Comparator.comparing(Tag::getUpvotes).reversed())
-            .limit(10).collect(Collectors.toList());
+        tags = tags.stream()
+            .filter(t -> t.getAvgUpvotes() < 10000)
+            .filter(t -> !t.getTagName().equals("java"))
+            .sorted(Comparator.comparing(Tag::getAvgUpvotes).reversed())
+            .limit(50).collect(Collectors.toList());
         for (int i = 0; i < tags.size(); i++) {
           for (int j = i + 1; j < tags.size(); j++) {
             CombinationOfTags combinationOfTags = new CombinationOfTags();
@@ -86,7 +82,7 @@ public class TagsController {
           }
         }
         for (Question q : questions) {
-          if (q.getTags().size() < 2) {
+          if (q.getTags().size() < 3) {
             continue;
           }
           for (CombinationOfTags c : list) {
@@ -97,17 +93,27 @@ public class TagsController {
           }
         }
         for (CombinationOfTags c : list) {
-          c.setAvgUpvotes(((double) c.getUpvotes()) / ((double) c.getQuestionNum()));
+          if (c.getQuestionNum() == 0) {
+            continue;
+          }
           ArrayList<String> tagName = new ArrayList<>();
           for (Tag tag : c.getTags()) {
             tagName.add(tag.getTagName());
           }
-          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+          map.put(String.join("+", tagName), c.getUpvotes() / c.getQuestionNum());
         }
+        map = map.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            .limit(13)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+                LinkedHashMap::new));
         break;
       case "3":
-        tags = tags.stream().sorted(Comparator.comparing(Tag::getUpvotes).reversed())
-            .limit(10).collect(Collectors.toList());
+        tags = tags.stream()
+            .filter(t -> t.getAvgUpvotes() < 10000)
+            .filter(t -> !t.getTagName().equals("java"))
+            .sorted(Comparator.comparing(Tag::getAvgUpvotes).reversed())
+            .limit(50).collect(Collectors.toList());
         for (int i = 0; i < tags.size(); i++) {
           for (int j = i + 1; j < tags.size(); j++) {
             for (int k = j + 1; k < tags.size(); k++) {
@@ -131,22 +137,27 @@ public class TagsController {
           }
         }
         for (CombinationOfTags c : list) {
-          c.setAvgUpvotes(((double) c.getUpvotes()) / ((double) c.getQuestionNum()));
+          if (c.getQuestionNum() == 0) {
+            continue;
+          }
           ArrayList<String> tagName = new ArrayList<>();
           for (Tag tag : c.getTags()) {
             tagName.add(tag.getTagName());
           }
-          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+          map.put(String.join(" + ", tagName), c.getUpvotes() / c.getQuestionNum());
         }
         break;
       default:
         return null;
     }
-    return map.entrySet().stream()
+    map = map.entrySet().stream()
         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-        .limit(10)
+        .limit(13)
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
+    System.out.println(CombinationNum + "tags: avgUpvotes finished, time: "
+        + (System.currentTimeMillis() - startTime) / 1000 + "s");
+    return map;
   }
 
 
@@ -154,21 +165,23 @@ public class TagsController {
    * @return key: one tag, value: average views over thread
    */
   @GetMapping("/avgViews-tag")
-  public Map<String, Double> tagViewsDistribution(String CombinationNum) {
-    Map<String, Double> map = new LinkedHashMap<>();
-
+  public Map<String, Integer> tagViewsDistribution(String CombinationNum) {
+    long startTime = System.currentTimeMillis();
+    Map<String, Integer> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
     List<CombinationOfTags> list = new ArrayList<>();
-    List<Question> questions = questionMapper.selectQuestions(null);
+    List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
     switch (CombinationNum) {
       case "1":
         for (Tag tag : tags) {
-          map.put(tag.getTagName(), (double) tag.getViews());
+          map.put(tag.getTagName(), tag.getAvgViews());
         }
         break;
       case "2":
-        tags = tags.stream().sorted(Comparator.comparing(Tag::getViews).reversed())
-            .limit(10).collect(Collectors.toList());
+        tags = tags.stream()
+            .filter(t -> !t.getTagName().equals("java"))
+            .sorted(Comparator.comparing(Tag::getAvgViews).reversed())
+            .limit(50).collect(Collectors.toList());
         for (int i = 0; i < tags.size(); i++) {
           for (int j = i + 1; j < tags.size(); j++) {
             CombinationOfTags combinationOfTags = new CombinationOfTags();
@@ -178,28 +191,32 @@ public class TagsController {
           }
         }
         for (Question q : questions) {
-          if (q.getTags().size() < 2) {
+          if (q.getTags().size() < 3) {
             continue;
           }
           for (CombinationOfTags c : list) {
             if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
               c.setQuestionNum(c.getQuestionNum() + 1);
-              c.setUpvotes(c.getViews() + q.getViewCount());
+              c.setViews(c.getViews() + q.getViewCount());
             }
           }
         }
         for (CombinationOfTags c : list) {
-          c.setAvgUpvotes(((double) c.getViews()) / ((double) c.getQuestionNum()));
+          if (c.getQuestionNum() == 0) {
+            continue;
+          }
           ArrayList<String> tagName = new ArrayList<>();
           for (Tag tag : c.getTags()) {
             tagName.add(tag.getTagName());
           }
-          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+          map.put(String.join(" + ", tagName), c.getViews() / c.getQuestionNum());
         }
         break;
       case "3":
-        tags = tags.stream().sorted(Comparator.comparing(Tag::getViews).reversed())
-            .limit(10).collect(Collectors.toList());
+        tags = tags.stream()
+            .filter(t -> !t.getTagName().equals("java"))
+            .sorted(Comparator.comparing(Tag::getAvgViews).reversed())
+            .limit(50).collect(Collectors.toList());
         for (int i = 0; i < tags.size(); i++) {
           for (int j = i + 1; j < tags.size(); j++) {
             for (int k = j + 1; k < tags.size(); k++) {
@@ -218,27 +235,32 @@ public class TagsController {
           for (CombinationOfTags c : list) {
             if (new HashSet<>(q.getTags()).containsAll(c.getTags())) {
               c.setQuestionNum(c.getQuestionNum() + 1);
-              c.setUpvotes(c.getViews() + q.getViewCount());
+              c.setViews(c.getViews() + q.getViewCount());
             }
           }
         }
         for (CombinationOfTags c : list) {
-          c.setAvgUpvotes(((double) c.getViews()) / ((double) c.getQuestionNum()));
+          if (c.getQuestionNum() == 0) {
+            continue;
+          }
           ArrayList<String> tagName = new ArrayList<>();
           for (Tag tag : c.getTags()) {
             tagName.add(tag.getTagName());
           }
-          map.put(String.join(" + ", tagName), c.getAvgUpvotes());
+          map.put(String.join(" + ", tagName), c.getViews() / c.getQuestionNum());
         }
         break;
       default:
         return null;
     }
-    return map.entrySet().stream()
+    map = map.entrySet().stream()
         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
         .limit(10)
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
+    System.out.println(CombinationNum + " tags: avgViews-tag finished, time: "
+        + (System.currentTimeMillis() - startTime) / 1000 + "s");
+    return map;
   }
 
 }

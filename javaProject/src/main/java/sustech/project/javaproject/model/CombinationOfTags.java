@@ -10,9 +10,7 @@ public class CombinationOfTags {
   private Set<Tag> tags;
   private int questionNum;
   private int views;
-  private double avgViews;
   private int upvotes;
-  private double avgUpvotes;
 
   public CombinationOfTags() {
     tags = new HashSet<>();
@@ -42,27 +40,11 @@ public class CombinationOfTags {
     this.views = views;
   }
 
-  public double getAvgViews() {
-    return avgViews;
-  }
-
-  public void setAvgViews(double avgViews) {
-    this.avgViews = avgViews;
-  }
-
   public int getUpvotes() {
     return upvotes;
   }
 
   public void setUpvotes(int upvotes) {
     this.upvotes = upvotes;
-  }
-
-  public double getAvgUpvotes() {
-    return avgUpvotes;
-  }
-
-  public void setAvgUpvotes(double avgUpvotes) {
-    this.avgUpvotes = avgUpvotes;
   }
 }

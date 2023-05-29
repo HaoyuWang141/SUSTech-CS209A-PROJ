@@ -56,7 +56,7 @@ public class Answer {
   }
 
   public void setOwner(User owner) {
-    if (owner != null || owner.getAccountId() != null) {
+    if (owner == null || owner.getAccountId() == null) {
       this.owner = null;
       return;
     }

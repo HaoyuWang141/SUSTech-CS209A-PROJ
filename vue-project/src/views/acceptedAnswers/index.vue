@@ -233,29 +233,17 @@ onBeforeMount(() => {
     let hasAcceptedAnswerNum = 0
     let moreUpvotesNum = 0
     axios
-        .get("/questions/getNum", {
-            params: {
-                status: 'hasAnswer'
-            }
-        })
+        .get("/questions/getNum", {params: {status: 'hasAnswer'}})
         .then((response) => {
             hasAnswerNum = response.data
-            return axios.get("/questions/getNum", {
-                params: {
-                    status: 'hasAcceptedAnswer'
-                }
-            })
+            return axios.get("/questions/getNum", {params: {status: 'hasAcceptedAnswer'}})
         })
         .then((response) => {
             hasAcceptedAnswerNum = response.data
             option1.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
             option2.series.data[0].value = hasAcceptedAnswerNum
             option2.series.data[1].value = hasAnswerNum - hasAcceptedAnswerNum
-            return axios.get("/questions/getNum", {
-                params: {
-                    status: 'moreUpvotes'
-                }
-            })
+            return axios.get("/questions/getNum", {params: {status: 'moreUpvotes'}})
         })
         .then((response) => {
             moreUpvotesNum = response.data
@@ -271,10 +259,16 @@ onBeforeMount(() => {
     axios
         .get("/answers/ThreadNum-ResolutionTime")
         .then((response) => {
+            let min = Infinity
+            let max = 0
             for (let key in response.data) {
                 option4.xAxis[0].data.push(key)
                 option4.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option4.visualMap.min = min
+            option4.visualMap.max = max
         })
 })
 </script>

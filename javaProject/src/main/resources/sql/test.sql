@@ -1,25 +1,15 @@
-select min(t.cnt) from
-    (select count(*) cnt from question join answer on question.id = answer.question_id group by question_id) as t;
+select id, answer_count + question.comment_count, answer_count, comment_count
+from question;
 
-select max(t.cnt) from
-    (select count(*) cnt from question join answer on question.id = answer.question_id group by question_id) as t;
+select owner_id, count(*) from question group by owner_id;
 
-select avg(t.cnt) from
-    (select count(*) cnt from question join answer on question.id = answer.question_id group by question_id) as t;
+select owner_id, count(*) from answer group by owner_id;
 
-select tag_name from tag natural join question_tag where question_id = 29500;
+select owner_id, count(*) from comment group by owner_id;
 
-
-
-
-
-
-
-
-
-
-
-
+select question.owner_id, answer.owner_id
+from question
+         join answer on question.id = answer.question_id;
 
 
 

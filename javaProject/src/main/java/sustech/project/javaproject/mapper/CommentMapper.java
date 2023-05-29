@@ -23,4 +23,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
 
   @Select("select count(*) from comment where owner_id = #{userId}")
   int countByUserId(int userId);
+
+  @Select("select count(*) from comment where question_id = #{question_id}")
+  int countByQuestionId(int question_id);
+
 }

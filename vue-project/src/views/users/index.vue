@@ -5,10 +5,7 @@
     <el-table
             :data="tableData"
             :span-method="spanMethod"
-            style="padding: 10px 0 100px 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;"
+            style="width: 100% ;padding: 10px 0 20px 180px;"
             :header-cell-style="{'text-align':'center'}">
         class="table">
         <el-table-column
@@ -30,6 +27,7 @@
                 align="center">
         </el-table-column>
     </el-table>
+    <br/> <br/>
     <BaseEchart :chart-id="id5" :option="option5"/>
 
 </template>
@@ -196,26 +194,26 @@ const id5 = 'chart5'
 const option5 = reactive({
     title: {
         text: 'Active Users',
-        left: 'center'
+        subtext: 'Question & Answer & Comment',
+        left: 'center',
     },
     polar: {
-        radius: ['10%', '70%']
+        radius: ['5%', '75%'],
     },
     angleAxis: {
         max: 4,
-        startAngle: 90
+        startAngle: 90,
+        show: false
     },
     radiusAxis: {
         type: 'category',
         data: [],
-        axisLabel: {
-            show: false
-        },
+        show: false
     },
     visualMap: {
         show: false,
-        min: 30,
-        max: 100,
+        min: 0,
+        max: 0,
         dimension: 1,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
@@ -227,7 +225,7 @@ const option5 = reactive({
         data: [],
         coordinateSystem: 'polar',
         label: {
-            show: true,
+            show: false,
             position: 'middle',
             formatter: '{c}'
         }
@@ -252,56 +250,58 @@ function spanMethod({row, column, rowIndex, columnIndex}) {
 
 onBeforeMount(() => {
     const axios = getCurrentInstance().appContext.config.globalProperties.$http
-    axios.get("/users/usersDistribution", {
-        params: {
-            type: 'all'
-        }
-    })
+    axios.get("/users/usersDistribution", {params: {type: 'all'}})
         .then((response) => {
+            let min = Infinity
+            let max = 0
             for (let key in response.data) {
                 option1.xAxis.data.push(key)
                 option1.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option1.visualMap.min = min
+            option1.visualMap.max = max
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/users/usersDistribution", {
-        params: {
-            type: 'answer'
-        }
-    })
+    axios.get("/users/usersDistribution", {params: {type: 'answer'}})
         .then((response) => {
+            let min = Infinity
+            let max = 0
             for (let key in response.data) {
                 option2.xAxis.data.push(key)
                 option2.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option2.visualMap.min = min
+            option2.visualMap.max = max
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/users/usersDistribution", {
-        params: {
-            type: 'comment'
-        }
-    })
+    axios.get("/users/usersDistribution", {params: {type: 'comment'}})
         .then((response) => {
+            let min = Infinity
+            let max = 0
             for (let key in response.data) {
                 option3.xAxis.data.push(key)
                 option3.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option3.visualMap.min = min
+            option3.visualMap.max = max
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/users/participationAnalysis", {
-        params: {
-            type: 'all'
-        }
-    })
+    axios.get("/users/participationAnalysis", {params: {type: 'all'}})
         .then((response) => {
             console.log(response.data)
             for (let key in response.data) {
@@ -311,16 +311,8 @@ onBeforeMount(() => {
                     number: response.data[key]
                 })
             }
+            return axios.get("/users/participationAnalysis", {params: {type: 'answer'}})
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/users/participationAnalysis", {
-        params: {
-            type: 'answer'
-        }
-    })
         .then((response) => {
             for (let key in response.data) {
                 tableData.push({
@@ -329,16 +321,8 @@ onBeforeMount(() => {
                     number: response.data[key]
                 })
             }
+            return axios.get("/users/participationAnalysis", {params: {type: 'comment'}})
         })
-        .catch((error) => {
-            console.log(error)
-        })
-
-    axios.get("/users/participationAnalysis", {
-        params: {
-            type: 'comment'
-        }
-    })
         .then((response) => {
             for (let key in response.data) {
                 tableData.push({
@@ -354,6 +338,8 @@ onBeforeMount(() => {
 
     axios.get("/users/isActive")
         .then((response) => {
+            let min = Infinity
+            let max = 0
             option5.angleAxis.max = 0
             for (let key in response.data) {
                 option5.radiusAxis.data.push(key)
@@ -361,7 +347,11 @@ onBeforeMount(() => {
                 if (response.data[key] > option5.angleAxis.max) {
                     option5.angleAxis.max = response.data[key]
                 }
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option5.visualMap.min = min
+            option5.visualMap.max = max
         }).catch((error) => {
         console.log(error)
     })

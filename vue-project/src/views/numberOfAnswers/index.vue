@@ -20,6 +20,7 @@
     <br/><br/>
     <BaseEchart :chart-id="id3" :option="option3"/>
     <BaseEchart :chart-id="id4" :option="option4"/>
+    <BaseEchart :chart-id="id5" :option="option5"/>
 </template>
 
 <script setup>
@@ -149,7 +150,7 @@ const option3 = reactive({
 const id4 = 'chart4'
 const option4 = reactive({
     title: {
-        text: 'Answer Number Over Time',
+        text: 'Question Number Over Time',
         left: 'center'
     },
     grid: {
@@ -160,7 +161,7 @@ const option4 = reactive({
         // containLabel: true
     },
     xAxis: {
-        type: 'value',
+        type: 'category',
         data: []
     },
     yAxis: {
@@ -180,8 +181,51 @@ const option4 = reactive({
     ],
     visualMap: {
         show: false,
-        min: 10,
-        max: 30,
+        min: 0,
+        max: 0,
+        dimension: 1,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
+});
+
+const id5 = 'chart5'
+const option5 = reactive({
+    title: {
+        text: 'Answer Number Over Time',
+        left: 'center'
+    },
+    grid: {
+        left: '10%',
+        right: '5%',
+        top: '20%',
+        bottom: '20%',
+        // containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: []
+    },
+    yAxis: {
+        type: 'value',
+        axisLine: {
+            show: true,
+        },
+        splitLine: {
+            show: false
+        }
+    },
+    series: [
+        {
+            data: [],
+            type: 'line'
+        }
+    ],
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 0,
         dimension: 1,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
@@ -213,18 +257,44 @@ onBeforeMount(() => {
             return axios.get("/answers/QuestionNum-AnswerNum")
         })
         .then((response) => {
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option3.xAxis.data.push(key)
                 option3.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option3.visualMap.max = max
+            option3.visualMap.min = min
+            return axios.get("/questions/QuestionNum-Time")
+        })
+        .then((response) => {
+            console.log(response.data)
+            let min = Infinity;
+            let max = 0;
+            for (let key in response.data) {
+                option4.xAxis.data.push(key)
+                option4.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
+            }
+            option4.visualMap.max = max
+            option4.visualMap.min = min
             return axios.get("/answers/AnswerNum-Time")
         })
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
-                option4.xAxis.data.push(key)
-                option4.series[0].data.push(response.data[key])
+                option5.xAxis.data.push(key)
+                option5.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option5.visualMap.max = max
+            option5.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)

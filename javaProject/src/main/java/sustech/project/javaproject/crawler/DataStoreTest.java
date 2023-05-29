@@ -14,8 +14,8 @@ public class DataStoreTest {
   public static void main(String[] args) {
     try {
       transferQuestion();
-      // transferAnswer();
-      // transferComment();
+      transferAnswer();
+      transferComment();
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }
@@ -30,7 +30,7 @@ public class DataStoreTest {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
     String jsonString = """
-        {
+        [{
           "tags": [
             "android",
             "android-recyclerview"
@@ -57,17 +57,18 @@ public class DataStoreTest {
           "content_license": "CC BY-SA 4.0",
           "link": "https://stackoverflow.com/questions/24885223/why-doesnt-recyclerview-have-onitemclicklistener",
           "title": "Why doesn&#39;t RecyclerView have onItemClickListener()?"
-        }
+        }]
         """;
-    Question q = objectMapper.readValue(jsonString, Question.class);
+    // Question q = objectMapper.readValue(jsonString, Question.class);
+    List<Question> q = objectMapper.readValue(jsonString, new TypeReference<>() {});
     System.out.println(q.toString());
   }
 
   static void transferAnswer() throws JsonProcessingException {
-    ObjectMapper objectMapper1 = new ObjectMapper();
-    Answer obj = new Answer();
-    String jsonString1 = objectMapper1.writeValueAsString(obj);
-    System.out.println(jsonString1);
+    // ObjectMapper objectMapper1 = new ObjectMapper();
+    // Answer obj = new Answer();
+    // String jsonString1 = objectMapper1.writeValueAsString(obj);
+    // System.out.println(jsonString1);
 
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
@@ -133,10 +134,10 @@ public class DataStoreTest {
   }
 
   static void transferComment() throws JsonProcessingException {
-    ObjectMapper objectMapper1 = new ObjectMapper();
-    Comment obj = new Comment();
-    String jsonString1 = objectMapper1.writeValueAsString(obj);
-    System.out.println(jsonString1);
+    // ObjectMapper objectMapper1 = new ObjectMapper();
+    // Comment obj = new Comment();
+    // String jsonString1 = objectMapper1.writeValueAsString(obj);
+    // System.out.println(jsonString1);
 
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);

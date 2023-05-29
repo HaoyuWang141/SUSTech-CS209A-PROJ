@@ -1,6 +1,14 @@
 <template>
     <BaseEchart :option="option1" :chart-id="id1"/>
+    <br/> <br/>
     <BaseEchart :option="option2" :chart-id="id2"/>
+    <p>
+        <br />离群值解释：<br /><br />
+        我们恰收集到了一个具有 26979 upvotes 的问题，这三个标签仅在该问题上出现，因此其均值同为该值。 <br /><br />
+        其他问题最多仅有 7680 upvotes，故与这三个标签有较大差距。 <br /><br />
+        performance 标签也在含有 26979 upvotes 的问题中，但也在其他问题中出现，因此它的 upvotes 在平均后处于四千多，处于领先地位，我们暂且将它保留下来。<br /><br />
+    </p>
+    <BaseEchart :option="option2_1" :chart-id="id2_1"/>
     <BaseEchart :option="option3" :chart-id="id3"/>
     <BaseEchart :option="option4" :chart-id="id4"/>
     <BaseEchart :option="option5" :chart-id="id5"/>
@@ -16,6 +24,18 @@ import "echarts-wordcloud"
 
 const id1 = 'chart1'
 const option1 = reactive({
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 0,
+        dimension: 0,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
+    tooltip: {
+        show: true,
+    },
     series: [
         {
             type: "wordCloud",
@@ -32,19 +52,19 @@ const option1 = reactive({
             rotationRange: [0, 0],
             //随机生成字体颜色
             // maskImage: maskImage,
-            textStyle: {
-                color: function () {
-                    return (
-                        "rgb(" +
-                        Math.round(Math.random() * 255) +
-                        ", " +
-                        Math.round(Math.random() * 255) +
-                        ", " +
-                        Math.round(Math.random() * 255) +
-                        ")"
-                    );
-                },
-            },
+            // textStyle: {
+            //     color: function () {
+            //         return (
+            //             "rgb(" +
+            //             Math.round(Math.random() * 255) +
+            //             ", " +
+            //             Math.round(Math.random() * 255) +
+            //             ", " +
+            //             Math.round(Math.random() * 255) +
+            //             ")"
+            //         );
+            //     },
+            // },
             //位置相关设置
             // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
             // Default to be put in the center and has 75% x 80% size.
@@ -66,14 +86,74 @@ const option2 = reactive({
         text: '1 Tag - Upvotes (avg)',
         left: 'center'
     },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '0%',
+        containLabel: false
+    },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {
         trigger: 'item'
     },
-    radiusAxis: {},
+    xAxis: {
+        type: 'value',
+        show: false,
+    },
+    yAxis: {
+        type: 'category',
+        data: [],
+        show: false,
+    },
+    visualMap: {
+        show: false,
+        min: 0,
+        max: 0,
+        dimension: 0,
+        inRange: {
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
+        }
+    },
+    series: [
+        {
+            type: 'bar',
+            data: [],
+            itemStyle: {
+                borderRadius: 20,
+                borderColor: '#fff',
+                borderWidth: 3
+            },
+        }
+    ]
+})
+
+const id2_1 = 'chart2_1'
+const option2_1 = reactive({
+    title: {
+        text: '1 Tag - Upvotes (avg) [去除前三]',
+        left: 'center'
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '0%',
+        containLabel: false
+    },
+    angleAxis: {
+        type: 'category',
+        data: [],
+        show: false,
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -83,8 +163,8 @@ const option2 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -107,12 +187,15 @@ const option3 = reactive({
     },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {
         trigger: 'item'
     },
-    radiusAxis: {},
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -122,8 +205,8 @@ const option3 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -146,10 +229,13 @@ const option4 = reactive({
     },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {},
-    radiusAxis: {},
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -159,8 +245,8 @@ const option4 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -186,12 +272,15 @@ const option5 = reactive({
     },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {
         trigger: 'item'
     },
-    radiusAxis: {},
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -201,8 +290,8 @@ const option5 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -225,12 +314,15 @@ const option6 = reactive({
     },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {
         trigger: 'item'
     },
-    radiusAxis: {},
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -240,8 +332,8 @@ const option6 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -264,12 +356,15 @@ const option7 = reactive({
     },
     angleAxis: {
         type: 'category',
-        data: []
+        data: [],
+        show: false,
     },
     tooltip: {
         trigger: 'item'
     },
-    radiusAxis: {},
+    radiusAxis: {
+        show: false,
+    },
     polar: {},
     itemStyle: {
         borderRadius: 20,
@@ -279,8 +374,8 @@ const option7 = reactive({
     visualMap: {
         show: false,
         min: 0,
-        max: 30,
-        dimension: 1,
+        max: 0,
+        dimension: 0,
         inRange: {
             color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
         }
@@ -299,112 +394,155 @@ onBeforeMount(() => {
     const axios = getCurrentInstance().appContext.config.globalProperties.$http
     axios.get("/tags/QuestionNum-tag")
         .then((response) => {
+            let min = Infinity;
+            let max = 0;
+            console.log(response.data)
             for (let key in response.data) {
                 option1.series[0].data.push({
                     name: key,
                     value: response.data[key]
                 })
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option1.visualMap.max = max
+            option1.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgUpvotes-tag" ,{
-        params : {
-            CombinationNum : "1"
-        }
-    })
+    axios.get("/tags/avgUpvotes-tag", {params: {CombinationNum: "1"}})
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
-                option2.angleAxis.data.push(key)
-                option2.series[0].data.push(response.data[key])
+                option2.yAxis.data.unshift(key)
+                option2.series[0].data.unshift(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option2.visualMap.max = max
+            option2.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgUpvotes-tag" ,{
-        params : {
-            CombinationNum : "2"
-        }
-    })
+    axios.get("/tags/avgUpvotes-tag", {params: {CombinationNum: "1"}})
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
+            for (let key in response.data) {
+                if (response.data[key] > 10000) {
+                    continue
+                }
+                option2_1.angleAxis.data.push(key)
+                option2_1.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
+            }
+            option2_1.visualMap.max = max
+            option2_1.visualMap.min = min
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+    axios.get("/tags/avgUpvotes-tag", {params: {CombinationNum: "2"}})
+        .then((response) => {
+            console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option3.angleAxis.data.push(key)
                 option3.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option3.visualMap.max = max
+            option3.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgUpvotes-tag" ,{
-        params : {
-            CombinationNum : "3"
+    axios.get("/tags/avgUpvotes-tag", {
+        params: {
+            CombinationNum: "3"
         }
     })
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option4.angleAxis.data.push(key)
                 option4.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option4.visualMap.max = max
+            option4.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgViews-tag",{
-        params : {
-            CombinationNum : "1"
-        }
-    })
+    axios.get("/tags/avgViews-tag", {params: {CombinationNum: "1"}})
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option5.angleAxis.data.push(key)
                 option5.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option5.visualMap.max = max
+            option5.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgViews-tag",{
-        params : {
-            CombinationNum : "2"
-        }
-    })
+    axios.get("/tags/avgViews-tag", {params: {CombinationNum: "2"}})
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option6.angleAxis.data.push(key)
                 option6.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option6.visualMap.max = max
+            option6.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
 
-    axios.get("/tags/avgViews-tag",{
-        params : {
-            CombinationNum : "3"
-        }
-    })
+    axios.get("/tags/avgViews-tag", {params: {CombinationNum: "3"}})
         .then((response) => {
             console.log(response.data)
+            let min = Infinity;
+            let max = 0;
             for (let key in response.data) {
                 option7.angleAxis.data.push(key)
                 option7.series[0].data.push(response.data[key])
+                min = Math.min(min, response.data[key])
+                max = Math.max(max, response.data[key])
             }
+            option7.visualMap.max = max
+            option7.visualMap.min = min
         })
         .catch((error) => {
             console.log(error)
         })
-
 })
 </script>
