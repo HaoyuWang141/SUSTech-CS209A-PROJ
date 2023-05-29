@@ -178,8 +178,11 @@ const option4 = reactive({
         show: true,
     },
     grid: {
-        left: '5%',
-        right: '5%'
+        left: '10%',
+        right: '5%',
+        top: '20%',
+        bottom: '20%',
+        // containLabel: true
     },
     xAxis: [{
         type: 'category',

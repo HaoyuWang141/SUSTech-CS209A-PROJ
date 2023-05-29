@@ -49,9 +49,9 @@ onBeforeUnmount(() => {
 <style scoped>
 .chart-container {
     //border: 2px solid red;
-    padding: 10px 0 20px 250px;
+    padding: 10px 0 20px 200px;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     height: 400px;
     overflow: visible;
 }
