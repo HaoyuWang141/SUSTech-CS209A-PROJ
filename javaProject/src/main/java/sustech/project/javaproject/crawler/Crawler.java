@@ -168,20 +168,37 @@ public class Crawler {
     }
 
 
-    static StringBuilder getComment(String questionIDs) {
+    static StringBuilder getQuestionComment(String questionIDs) {
         String apiUrl = "https://api.stackexchange.com/2.3/questions/" + questionIDs +
                 "/comments?pagesize=100&site=stackoverflow";
         return executeQuery(apiUrl);
     }
 
-    static StringBuilder getComment(List<JsonQuestion> questions) {
+    static StringBuilder getQuestionComment(List<JsonQuestion> questions) {
         List<String> questionIDs = new ArrayList<>();
         for (JsonQuestion question : questions) {
             questionIDs.add(String.valueOf(question.getQuestion_id()));
         }
         String questionIDsString = String.join(";", questionIDs);
-        return getComment(questionIDsString);
+        return getQuestionComment(questionIDsString);
     }
+
+    static StringBuilder getAnswerComment(String answerIDs) {
+        String apiUrl = "https://api.stackexchange.com/2.3/answers/" + answerIDs +
+                "/comments?pagesize=100&site=stackoverflow";
+        return executeQuery(apiUrl);
+    }
+
+    static StringBuilder getAnswerComment(List<JsonAnswer> answers) {
+        List<String> answerIDs = new ArrayList<>();
+        for (JsonAnswer answer : answers) {
+            answerIDs.add(String.valueOf(answer.getAnswer_id()));
+        }
+        String answerIDsString = String.join(";", answerIDs);
+        return getAnswerComment(answerIDsString);
+    }
+
+
 
 
     static StringBuilder testQuery() {
