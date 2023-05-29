@@ -1,5 +1,6 @@
 package sustech.project.javaproject.crawler;
 
+import sustech.project.javaproject.crawler_model.JsonAnswer;
 import sustech.project.javaproject.crawler_model.JsonQuestion;
 
 import java.io.BufferedWriter;
@@ -131,18 +132,25 @@ public class TextGenerator {
                 if (answerList.size() == 50) break;
             }
 
-            StringBuilder sb = Crawler.getAnswerComment(answerList);
-            if (sb != null) {
-                out.write("[");
-                out.write(extractItem(sb));
-                out.write("],\n");
+            if (answerList.size() == 0) {
+                out.write("[],\n");
             }
             else {
-                System.out.println("response is null!");
-                break;
+                StringBuilder sb = Crawler.getAnswerComment(answerList);
+                if (sb != null) {
+                    out.write("[");
+                    out.write(extractItem(sb));
+                    out.write("],\n");
+                }
+                else {
+                    System.out.println("response is null!");
+                    break;
+                }
             }
 
         }
+
+        out.close();
     }
 
 
