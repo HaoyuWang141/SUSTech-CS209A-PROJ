@@ -1,5 +1,5 @@
 <template>
-    <div :id="chartId" class="chart-container">111</div>
+    <div :id="chartId" class="chart-container"></div>
 </template>
 
 <script setup>

@@ -25,8 +25,8 @@ public class AnswersController {
   AnswerMapper answerMapper;
 
   @GetMapping("/getNum")
-  public int getNum(String status) {
-    int result = 0;
+  public long getNum(String status) {
+    long result = 0;
     switch (status) {
       case "avg":
         result = questionMapper.avgAnswerNum();
@@ -36,6 +36,9 @@ public class AnswersController {
         break;
       case "max":
         result = questionMapper.maxAnswerNum();
+        break;
+      case "all":
+        result = answerMapper.selectCount(null);
         break;
     }
     System.out.println(status + " answer number: " + result);

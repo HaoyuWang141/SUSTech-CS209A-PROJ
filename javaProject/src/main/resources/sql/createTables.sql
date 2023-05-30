@@ -58,3 +58,10 @@ create table question_tag
 
     primary key (question_id, tag_name)
 );
+
+drop table api;
+create table api
+(
+    name varchar primary key,
+    count integer
+);
