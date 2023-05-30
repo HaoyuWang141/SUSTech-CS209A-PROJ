@@ -25,7 +25,6 @@ public class ApisController {
     for(Api api:list){
       map.put(api.getName(),api.getCount());
     }
-    map.put("a",1);
     return map;
   }
 }

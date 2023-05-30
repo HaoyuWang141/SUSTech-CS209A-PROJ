@@ -12,9 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import sustech.project.javaproject.entity.Answer;
 import sustech.project.javaproject.entity.Comment;
 import sustech.project.javaproject.entity.Question;
@@ -38,10 +41,11 @@ public class DataStore {
       // questionTransfer(1);
       // answerTransfer(1, 1);
       // commentTransfer(1);
-      commentTransferRelatedToAnswer(1);
-      updateQuestionTable_CommentCount();
-      updateTagTable();
-      updateUserTable();
+      // commentTransferRelatedToAnswer(1);
+      // updateQuestionTable_CommentCount();
+      // updateTagTable();
+      // updateUserTable();
+      apiTransfer();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -486,6 +490,50 @@ public class DataStore {
     }
     preparedStatement.executeBatch();
     preparedStatement.close();
+    System.out.println();
+  }
+
+  private static void apiTransfer() throws IOException, SQLException {
+    System.out.println("comment transfer realted to answer start");
+    List<String> filePath = new ArrayList<>();
+    String path = "src/main/resources/data/apis1.txt";
+    byte[] bytes = Files.readAllBytes(Paths.get(path));
+    String content = new String(bytes);
+    String[] splitContent = content.split(",");
+    Map<String, Integer> apiMap = new HashMap<>();
+    for (String s : splitContent) {
+      if (s.contains("java.")) {
+        String patternString = "\\{(.*?)\\}";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(s);
+        while (matcher.find()) {
+          String api = matcher.group(1);
+          System.out.println(api);
+          if (apiMap.containsKey(api)) {
+            apiMap.put(api, apiMap.get(api) + 1);
+          } else {
+            apiMap.put(api, 1);
+          }
+        }
+      }
+    }
+    PreparedStatement preparedStatement = connection.prepareStatement(
+        "INSERT INTO api VALUES (?, ?) ON CONFLICT DO NOTHING ");
+    int count = 0;
+    for (Map.Entry<String, Integer> entry : apiMap.entrySet()) {
+      preparedStatement.setString(1, entry.getKey());
+      preparedStatement.setInt(2, entry.getValue());
+      preparedStatement.addBatch();
+      count++;
+      if(count % 100 == 0) {
+        preparedStatement.executeBatch();
+        preparedStatement.clearBatch();
+        count = 0;
+      }
+    }
+    preparedStatement.executeBatch();
+    preparedStatement.close();
+    System.out.println("api transfer finished");
     System.out.println();
   }
 }
