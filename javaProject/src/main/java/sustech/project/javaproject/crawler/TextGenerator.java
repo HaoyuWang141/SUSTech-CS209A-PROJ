@@ -2,7 +2,6 @@ package sustech.project.javaproject.crawler;
 
 import sustech.project.javaproject.crawler_model.JsonAnswer;
 import sustech.project.javaproject.crawler_model.JsonQuestion;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
