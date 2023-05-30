@@ -72,3 +72,17 @@
 1. 从问题、回答的发布时间来看，2015年之前java比较火爆，高质量问题较多；
 2. 从问题解决时间来看，某些问题发布后1s内就被解决了，且发布问题的用户和解决问题的用户是用一个人，存在刷分现象；
 3. 从与java相关的标签来看，Android、Spring、SpringBoot出现频率较多，表示移动端开发及SpringBoot框架比较热门；另外，arrays，list，string等java常用的工具出现频率也比较高。
+
+
+
+## CheckStyle
+
+![checkStyle1](img\checkStyle1.jpg)![checkStyle1](img\checkStyle2.jpg)
+
+
+
+## Git Commit
+
+![commitCount](img\commitCount.jpg)
+
+下图证明两个人都有参与。![commit](img\commit.jpg)
