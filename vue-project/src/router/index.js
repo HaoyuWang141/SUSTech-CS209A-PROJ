@@ -8,6 +8,7 @@ const NumberOfAnswers = () => import('@/views/NumberOfAnswers/index.vue')
 const AcceptedAnswers = () => import('@/views/AcceptedAnswers/index.vue')
 const Tags = () => import('@/views/Tags/index.vue')
 const Users = () => import('@/views/Users/index.vue')
+const Api = () => import('@/views/api/index.vue')
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -48,6 +49,11 @@ const routes = [
         path: '/Users',
         component: layout,
         children: [{path: '', name: 'users', component: Users, meta: {title: 'Users', icon: 'user'}}]
+    },
+    {
+        path: '/Api',
+        component: layout,
+        children: [{path: '', name: 'api', component: Api, meta: {title: 'Api', icon: 'link'}}]
     }
 ]
 

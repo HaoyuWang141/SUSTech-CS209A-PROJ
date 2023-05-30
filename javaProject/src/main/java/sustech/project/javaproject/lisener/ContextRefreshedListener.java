@@ -22,16 +22,16 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
   public void onApplicationEvent(ContextRefreshedEvent event) {
     System.out.println("容器初始化完毕");
 
-    long startTime = System.currentTimeMillis();
-    System.out.println("开始初始化带标签的问题列表");
-    TagsController.QUESTIONS_WITH_TAGS = questionMapper.selectQuestionsWithTags(null);
-    System.out.println(
-        "问题列表初始化完毕, 耗时：" + (System.currentTimeMillis() - startTime) / 1000 + " s");
-
-    startTime = System.currentTimeMillis();
-    System.out.println("开始初始化用户列表");
-    UsersController.USERS = userMapper.selectList(null);
-    System.out.println(
-        "用户列表初始化完毕, 耗时：" + (System.currentTimeMillis() - startTime) / 1000 + " s");
+    // long startTime = System.currentTimeMillis();
+    // System.out.println("开始初始化带标签的问题列表");
+    // TagsController.QUESTIONS_WITH_TAGS = questionMapper.selectQuestionsWithTags(null);
+    // System.out.println(
+    //     "问题列表初始化完毕, 耗时：" + (System.currentTimeMillis() - startTime) / 1000 + " s");
+    //
+    // startTime = System.currentTimeMillis();
+    // System.out.println("开始初始化用户列表");
+    // UsersController.USERS = userMapper.selectList(null);
+    // System.out.println(
+    //     "用户列表初始化完毕, 耗时：" + (System.currentTimeMillis() - startTime) / 1000 + " s");
   }
 }

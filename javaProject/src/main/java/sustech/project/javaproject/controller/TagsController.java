@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sustech.project.javaproject.entity.Question;
 import sustech.project.javaproject.entity.Tag;
+import sustech.project.javaproject.mapper.QuestionMapper;
 import sustech.project.javaproject.mapper.TagMapper;
 import sustech.project.javaproject.model.CombinationOfTags;
 
@@ -26,7 +27,10 @@ public class TagsController {
   @Autowired
   private TagMapper tagMapper;
 
-  public static List<Question> QUESTIONS_WITH_TAGS;
+  @Autowired
+  private QuestionMapper questonMapper;
+
+  // public static List<Question> QUESTIONS_WITH_TAGS;
 
   /**
    * @return key: tag, value: threadNum
@@ -60,8 +64,10 @@ public class TagsController {
     Map<String, Integer> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
     List<CombinationOfTags> list = new ArrayList<>();
-    List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
+    // List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
+    List<Question> questions = questonMapper.selectQuestionsWithTags(null);
     switch (CombinationNum) {
+
       case "1":
         for (Tag tag : tags) {
           map.put(tag.getTagName(), tag.getAvgUpvotes());
@@ -170,7 +176,8 @@ public class TagsController {
     Map<String, Integer> map = new LinkedHashMap<>();
     List<Tag> tags = tagMapper.selectList(null);
     List<CombinationOfTags> list = new ArrayList<>();
-    List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
+    // List<Question> questions = new ArrayList<>(QUESTIONS_WITH_TAGS);
+    List<Question> questions = questonMapper.selectQuestionsWithTags(null);
     switch (CombinationNum) {
       case "1":
         for (Tag tag : tags) {

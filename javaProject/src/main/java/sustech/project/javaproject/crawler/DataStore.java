@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import sustech.project.javaproject.entity.Answer;
 import sustech.project.javaproject.entity.Comment;
 import sustech.project.javaproject.entity.Question;
@@ -33,9 +35,10 @@ public class DataStore {
     try {
       Class.forName("org.postgresql.Driver");
       connection = DriverManager.getConnection(url, username, password);
-      questionTransfer(1);
-      answerTransfer(1, 1);
-      commentTransfer(1);
+      // questionTransfer(1);
+      // answerTransfer(1, 1);
+      // commentTransfer(1);
+      commentTransferRelatedToAnswer(1);
       updateQuestionTable_CommentCount();
       updateTagTable();
       updateUserTable();
@@ -293,6 +296,88 @@ public class DataStore {
     for (Comment comment : comments) {
       preparedStatement.setInt(1, comment.getId());
       preparedStatement.setInt(2, comment.getQuestionId());
+      if (comment.getOwner() == null) {
+        preparedStatement.setNull(3, java.sql.Types.INTEGER);
+      } else {
+        preparedStatement.setInt(3, comment.getOwner().getAccountId());
+      }
+      preparedStatement.setTimestamp(4, comment.getCreationDate());
+      count++;
+      preparedStatement.addBatch();
+      if (count % 100 == 0) {
+        preparedStatement.executeBatch();
+        preparedStatement.clearBatch();
+        count = 0;
+      }
+    }
+    preparedStatement.executeBatch();
+    preparedStatement.clearBatch();
+    count = 0;
+    System.out.println("comment insert finished");
+    System.out.println();
+  }
+
+  private static void commentTransferRelatedToAnswer(int commentCount)
+      throws IOException, SQLException {
+    System.out.println("comment transfer realted to answer start");
+    StringBuilder stringBuilder = new StringBuilder();
+    List<String> filePath = new ArrayList<>();
+    for (int i = 1; i <= commentCount; i++) {
+      filePath.add("src/main/resources/data/commentsRelatedToAnswer" + i + ".json");
+    }
+    for (String path : filePath) {
+      byte[] bytes = Files.readAllBytes(Paths.get(path));
+      String content = new String(bytes);
+      stringBuilder.append(content);
+    }
+    String content = stringBuilder.toString();
+    List<List<Comment>> list;
+    List<Comment> comments = new ArrayList<>();
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
+    list = objectMapper.readValue(content,
+        objectMapper.getTypeFactory().constructCollectionType(List.class,
+            objectMapper.getTypeFactory().constructCollectionType(List.class, Comment.class)));
+    for (List<Comment> l : list) {
+      comments.addAll(l);
+    }
+    // System.out.println(comments.toString());
+    PreparedStatement preparedStatement = null;
+
+    preparedStatement = connection.prepareStatement(
+        "INSERT INTO t_user VALUES (?, ?,0,0,0) ON CONFLICT DO NOTHING ");
+    int count = 0;
+    for (Comment comment : comments) {
+      if (comment.getOwner() == null) {
+        continue;
+      }
+      preparedStatement.setInt(1, comment.getOwner().getAccountId());
+      preparedStatement.setString(2, comment.getOwner().getDisplayName());
+      preparedStatement.addBatch();
+      count++;
+      if (count % 100 == 0) {
+        preparedStatement.executeBatch();
+        preparedStatement.clearBatch();
+        count = 0;
+      }
+    }
+    preparedStatement.executeBatch();
+    preparedStatement.clearBatch();
+    count = 0;
+    System.out.println("user insert finished");
+
+    Map<Integer, Integer> answerMapToQuestion = new HashMap<>();
+    Statement statement = connection.createStatement();
+    ResultSet resultSet = statement.executeQuery("SELECT id,question_id FROM answer");
+    while (resultSet.next()) {
+      answerMapToQuestion.put(resultSet.getInt(1), resultSet.getInt(2));
+    }
+
+    preparedStatement = connection.prepareStatement(
+        "INSERT INTO comment VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING ");
+    for (Comment comment : comments) {
+      preparedStatement.setInt(1, comment.getId());
+      preparedStatement.setInt(2, answerMapToQuestion.get(comment.getQuestionId()));
       if (comment.getOwner() == null) {
         preparedStatement.setNull(3, java.sql.Types.INTEGER);
       } else {
