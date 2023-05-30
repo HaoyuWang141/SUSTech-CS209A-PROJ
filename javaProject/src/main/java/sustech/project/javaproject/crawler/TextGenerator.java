@@ -178,12 +178,22 @@ public class TextGenerator {
 
 
     static void writeAPIs() throws IOException {
-        BufferedWriter out = new BufferedWriter(new FileWriter("./src/main/resources/data/apis_0_99.txt"));
+        BufferedWriter out = new BufferedWriter(new FileWriter("./src/main/resources/data/apis_495_599.txt"));
         JsonQuestion[] questions = Transfer.transferQuestion();
 
-        for (int t = 0; t < 100; t++) {
+        for (int t = 495; t < 600; t++) {
+            System.out.println("------------------------------------------------------------------" +
+                    "----------------------------------------------------");
+            System.out.println(t);
+            System.out.println("------------------------------------------------------------------" +
+                    "----------------------------------------------------");
             String url = "https://stackoverflow.com/questions/" + questions[t].getQuestion_id();
-            List<String> codes = WebScraper.getCodes(url);
+            List<String> codes;
+            try {
+                codes = WebScraper.getCodes(url);
+            } catch (Exception e) {
+                break;
+            }
             for (String code : codes) {
                 List<String> apis = JavaAPIExtractor.extractJavaAPIFromCode(code);
                 if (apis.size() != 0) {
