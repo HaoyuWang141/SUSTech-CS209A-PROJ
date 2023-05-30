@@ -20,8 +20,9 @@
 
 #### 爬虫
 
-+ HttpRequest generator
-+ Json & JsonObject Transfer
++ Http Request Generator
++ Json & Json Object Transfer
++ Java API Extractor
 
 #### 后端
 
@@ -42,9 +43,10 @@
 
 ### Spring Boot 项目结构
 
-+ config 配置类
-+ controller 控制层
-+ entity 实体类: 与数据库表一一对应
++ config: 配置类
++ controller: 控制层
++ crawler & crawler_model: 爬虫相关，包括生成Http请求、生成json文件、转换json文本与对象
++ entity: 实体类，与数据库表一一对应
 + mapper: 用以 Mybatis 映射数据库
 
 ### Vue 项目结构
