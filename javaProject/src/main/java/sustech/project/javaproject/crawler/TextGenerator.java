@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TextGenerator {
     public static void main(String[] args) throws IOException {
-        writeAnswerComment();
+        writeAPIs();
     }
 
 
@@ -174,6 +174,29 @@ public class TextGenerator {
             return s.substring(beginIdx, endIdx);
         else
             return "";
+    }
+
+
+    static void writeAPIs() throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter("./src/main/resources/data/apis_0_99.txt"));
+        JsonQuestion[] questions = Transfer.transferQuestion();
+
+        for (int t = 0; t < 100; t++) {
+            String url = "https://stackoverflow.com/questions/" + questions[t].getQuestion_id();
+            List<String> codes = WebScraper.getCodes(url);
+            for (String code : codes) {
+                List<String> apis = JavaAPIExtractor.extractJavaAPIFromCode(code);
+                if (apis.size() != 0) {
+                    for (String api : apis) {
+                        System.out.print(api + " ");
+                        out.write("{" + api + "},");
+                    }
+                    out.write("\n");
+                }
+            }
+        }
+
+        out.close();
     }
 
 }
