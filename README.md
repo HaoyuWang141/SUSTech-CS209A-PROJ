@@ -39,7 +39,7 @@
 
 ### 数据库设计
 
-![ER graph](img\ER graph.png)
+![ER graph](img/ER graph.png)
 
 ### Spring Boot 项目结构
 
@@ -73,16 +73,135 @@
 2. 从问题解决时间来看，某些问题发布后1s内就被解决了，且发布问题的用户和解决问题的用户是用一个人，存在刷分现象；
 3. 从与java相关的标签来看，Android、Spring、SpringBoot出现频率较多，表示移动端开发及SpringBoot框架比较热门；另外，arrays，list，string等java常用的工具出现频率也比较高。
 
+## 部署服务器
 
+### SpringBoot 项目
 
-## CheckStyle
+1. 在`application-pro.yml`配置文件中进行生产环境的配置
 
-![checkStyle1](img\checkStyle1.jpg)![checkStyle1](img\checkStyle2.jpg)
+   ```yaml
+   server:
+     port: 8080
+   
+   spring:
+     datasource:
+       url: jdbc:postgresql://localhost:5432/<database>
+       username: 
+       password: 
+   
+   logging:
+     level:
+       root: INFO
+   #    root: DEBUG
+     file:
+       name: /home/lighthouse/download/java2project.log
+   ```
 
+2. 在`application.yml`中确保:
 
+   ```yaml
+   spring:
+     profiles:
+       active: pro
+   ```
 
-## Git Commit
+3. 运行命令进行打包操作:
 
-![commitCount](img\commitCount.jpg)
+   ```
+   mvn clean package -DskipTests
+   ```
 
-下图证明两个人都有参与。![commit](img\commit.jpg)
+4. 将jar包上传到服务器中
+
+5. 运行命令:
+
+   ```
+   nohup java -jar <jar包名>.jar &
+   ```
+
+   下面是对该命令的解释：
+
+   - `nohup` 是一个命令，它允许在退出终端或注销用户之后继续在后台运行命令。它的作用是将命令与当前终端会话分离，使其在后台持续运行，不受终端关闭的影响。
+   - `java -jar javaProject-0.0.1-SNAPSHOT.jar` 是要运行的 Java 可执行 JAR 文件。该命令使用 Java 运行时环境 (JRE) 来执行 JAR 文件，并启动相应的 Java 应用程序。
+   - `&` 符号是用于将命令放入后台运行。它将命令放到一个子进程中执行，并立即返回命令提示符，允许你在后台继续执行其他命令。
+
+### Vue 项目
+
+1. 运行命令:
+
+   ```
+   npm run build
+   ```
+
+   工程将以html的形式打包在dist文件夹中
+
+2. 将该文件夹上传至服务器中, 例如存在"/usr/app/dist"路径下
+
+3. 在服务器中安装 nginx 服务器
+
+   ```
+   sudo apt update
+   sudo apt install nginx
+   ```
+
+   在 Ubuntu 系统下，你可以使用以下命令来管理 Nginx：
+
+   1. 启动 Nginx 服务：
+
+      ```shell
+      sudo systemctl start nginx
+      ```
+
+   2. 停止 Nginx 服务：
+
+      ```shell
+      sudo systemctl stop nginx
+      ```
+
+   3. 重启 Nginx 服务：
+
+      ```shell
+      sudo systemctl restart nginx
+      ```
+
+   4. 查看 Nginx 服务状态：
+
+      ```shell
+      sudo systemctl status nginx
+      ```
+
+4. 更改配置文件
+
+   + 进入nginx配置应用的文件夹中:
+
+     ```
+     cd /etc/nginx/conf.d
+     ```
+
+   + 添加conf文件
+
+     eg: `sudo vim vue.conf`
+
+   + 在conf文件中写入
+
+     ```
+     server {
+         listen      80;
+         server_name localhost;
+     
+         location / {
+             root /home/lighthouse/app/dist;
+             index index.html;
+         }
+     }
+     ```
+
+     root 要改为dist所在路径
+
+5. 重启Nginx服务
+
+   ```
+   sudo systemctl restart nginx
+   ```
+
+   

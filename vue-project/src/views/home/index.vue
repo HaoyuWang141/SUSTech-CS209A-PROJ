@@ -28,6 +28,8 @@
         <h3>前端</h3>
         <p>Vue3, Axios, Vue Router, Element Plus, Echarts</p>
         <br/><br/>
+        <h3>架构</h3>
+        <p>前后端分离架构，单页面应用，故全部api均为RESTful风格</p>
     </div>
 </template>
 

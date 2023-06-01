@@ -3,6 +3,14 @@ server:
 
 spring:
   datasource:
+#    url: jdbc:postgresql://114.132.51.227:5432/java2_project
     url: jdbc:postgresql://localhost:5432/java2_project
     username: admin_java2_project
     password: '@4Em~hD9EoPkEVEL3tgWY@'
+
+logging:
+  level:
+    root: INFO
+#    root: DEBUG
+  file:
+    name: /home/lighthouse/download/java2project.log

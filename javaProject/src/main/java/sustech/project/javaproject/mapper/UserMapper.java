@@ -21,11 +21,4 @@ public interface UserMapper extends BaseMapper<User> {
       @Result(property = "commentNumber", column = "comment_number")
   })
   List<User> selectAll();
-
-  @Select("select * from t_user where account_id = #{id}")
-  @Results({
-      @Result(property = "accountId", column = "account_id"),
-      @Result(property = "displayName", column = "display_name"),
-  })
-  User selectById(int id);
 }

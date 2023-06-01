@@ -26,25 +26,25 @@ import sustech.project.javaproject.entity.Question;
 public class DataStore {
 
   // 定义数据库连接信息
-  // private static final String url = "jdbc:postgresql://114.132.51.227:5432/java2_project";
-  // private static final String username = "admin_java2_project";
-  // private static final String password = "@4Em~hD9EoPkEVEL3tgWY@";
-  private static final String url = "jdbc:postgresql://localhost:5432/java2_project";
-  private static final String username = "postgres";
-  private static final String password = "111111";
+   private static final String url = "jdbc:postgresql://114.132.51.227:5432/java2_project";
+   private static final String username = "admin_java2_project";
+   private static final String password = "@4Em~hD9EoPkEVEL3tgWY@";
+//  private static final String url = "jdbc:postgresql://localhost:5432/java2_project";
+//  private static final String username = "postgres";
+//  private static final String password = "111111";
   private static Connection connection = null;
 
   public static void main(String[] args) {
     try {
       Class.forName("org.postgresql.Driver");
       connection = DriverManager.getConnection(url, username, password);
-      // questionTransfer(1);
-      // answerTransfer(1, 1);
-      // commentTransfer(1);
-      // commentTransferRelatedToAnswer(1);
-      // updateQuestionTable_CommentCount();
-      // updateTagTable();
-      // updateUserTable();
+       questionTransfer(1);
+       answerTransfer(1, 1);
+       commentTransfer(1);
+       commentTransferRelatedToAnswer(1);
+       updateQuestionTable_CommentCount();
+       updateTagTable();
+       updateUserTable();
       apiTransfer();
     } catch (Exception e) {
       e.printStackTrace();

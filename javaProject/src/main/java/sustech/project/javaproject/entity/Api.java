@@ -1,6 +1,9 @@
 package sustech.project.javaproject.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 public class Api {
+  @TableId
   private String name;
   private Integer count;
 
